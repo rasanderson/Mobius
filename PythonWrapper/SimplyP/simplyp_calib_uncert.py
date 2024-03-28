@@ -1,5 +1,8 @@
 import numpy as np
-import imp
+import types
+import importlib
+import importlib.machinery
+#import imp
 import pickle
 from scipy.stats import norm
 

@@ -6,7 +6,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import emcee
 import corner
-import imp
+import importlib
 import datetime as dt
 import random
 import pickle

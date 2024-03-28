@@ -11,14 +11,17 @@ parameters:
 "Start date" :     # [1000-01-01, 3000-01-01] The start date is inclusive
 2004-01-01
 
-"Timesteps" :     #(days) [0, 18446744073709551615]
-485
+"End date" :     # [1000-01-01, 3000-01-01] The start date is inclusive
+2005-01-01
+
+# "Timesteps" :     #(days) [0, 18446744073709551615]
+# 485
 
 "Latitude" :     #(°) [-90, 90] Used in PET calculation if no PET timeseries was provided in the input data
 59.6
 
-"Dynamic erodibility" :     # If true, simulate the change in erodibility on arable land through the year due to cropping and harvesting practices
-true
+#"Dynamic erodibility" :     # If true, simulate the change in erodibility on arable land through the year due to cropping and harvesting practices
+#true
 
 "Dynamic soil water EPC0, TDP and soil labile P" :     # Calculate a dynamic soil water EPC0 (the equilibrium P concentration of zero sorption), and therefore soilwater TDP concentration, so that it varies with labile P content? The labile P will also therefore vary
 true
