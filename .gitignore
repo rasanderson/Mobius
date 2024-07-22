@@ -13,3 +13,4 @@ json/json.hpp
 *.o
 *.png
 *.pkl
+.Rproj.user
