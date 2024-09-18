@@ -1,0 +1,195 @@
+
+
+```{python}
+import sys
+import subprocess
+
+print(sys.executable)
+subprocess.run(["pip", "list"])
+
+```
+
+```{python}
+# import matplotlib.pyplot as plt
+# %matplotlib inline
+# Switch to ''%matplotlib ipympl' for interactive plots
+import matplotlib.pyplot as plt
+plt.switch_backend('module://matplotlib_inline.backend_inline')
+import warnings
+import imp
+import pickle
+import lmfit
+import pandas as pd
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+import datetime as dt
+
+# Styling
+warnings.filterwarnings("ignore")
+plt.style.use('ggplot')
+```
+
+```{python}
+# Initialise wrapper and test datasets
+wrapper_fpath = (r"..\mobius.py")
+wr = imp.load_source('mobius', wrapper_fpath)
+wr.initialize('..\..\Applications\Persist\persist.dll')
+
+# Calibration functions
+calib_fpath = (r"..\mobius_calib_uncert_lmfit.py")
+cu = imp.load_source('mobius_calib_uncert_lmfit', calib_fpath)
+```
+
+```{python}
+#dataset = wr.DataSet.setup_from_parameter_and_input_files('..\..\Applications\IncaC\Boyne\persist_params_Boyne.dat', '..\..\Applications\IncaC\Boyne\incac_inputs_Boyne.dat')
+dataset = wr.DataSet.setup_from_parameter_and_input_files('..\..\Applications\Persist\Tarland\persist_params_Tarland.dat', '..\..\Applications\Persist\Tarland\persist_inputs_Tarland.dat')
+```
+
+```{python}
+comparisons = [
+    ('Reach flow', ['Coull'], 'observed Q', [])
+]
+```
+
+```{python}
+index_short_name = {'All':'A', 'Quick':'q', 'Soilwater':'s', 'Groundwater':'g', 'Coull':'r'}
+
+param_df = cu.get_double_parameters_as_dataframe(dataset, index_short_name=index_short_name)
+pd.options.display.max_rows = 999
+param_df
+```
+
+```{python}
+#| scrolled: true
+dataset.run_model()
+cu.print_goodness_of_fit(dataset, comparisons)
+cu.plot_objective(dataset, comparisons)
+```
+
+```{python}
+wanted_names = [
+    'Msnow', 'Tsnow', 'DDFmelt', 'DDET', 'Tc_s', 'Tc_g', 'perc_A_s_s', 'perc_A_s_g',
+]
+
+calib_df = param_df[[any([sn.startswith(n) for n in wanted_names]) for sn in param_df['short_name']]].reset_index(drop=True)
+calib_df
+```
+
+```{python}
+params = cu.parameter_df_to_lmfit(calib_df)
+
+params['perc_A_s_g'].set(expr = '1.0-perc_A_s_s')
+params['Tc_s_A'].min = 1.0
+params['Tc_s_A'].max = 10.0
+params['Tc_g_A'].min = 30.0
+params['Tc_g_A'].max = 200.0
+
+params
+```
+
+```{python}
+#| scrolled: true
+%%time
+mi, res = cu.minimize_residuals(params, dataset, comparisons, method='nelder', norm=False, skip_timesteps=365)
+print('Optimization results\n')
+lmfit.report_fit(res)
+print('\n\nOptimized parameter values:\n')
+res.params.pretty_print(precision=3)
+
+cu.set_parameter_values(res.params, dataset)
+dataset.write_parameters_to_file('optimized_params.dat')
+```
+
+```{python}
+#| scrolled: false
+dataset.run_model()
+cu.print_goodness_of_fit(dataset, comparisons)
+cu.plot_objective(dataset, comparisons)
+```
+
+```{python}
+res.params.add('err_q', value = 0.5, min = 0.05, max = 3)
+
+error_param_dict = {'Observed flow': 'err_q'}
+
+res.params
+```
+
+```{python}
+nworkers = 8
+ntemps   = 1
+nsteps   = 10000
+nwalk    = 100
+nburn    = 1000
+thin     = 1
+init_chains = 'uniform'
+skip_timesteps = 365
+result_path = r'pickled\\mcmc_results.pkl'
+chain_plot_path = r'plots\\chains.png'
+corner_plot_path = r'plots\\corner.png'
+
+settings_dict = {'params':res.params,
+                 'error_param_dict':error_param_dict,
+                 'comparisons':comparisons,
+                 'skip_timesteps':skip_timesteps,
+                 'nworkers':nworkers,
+                 'ntemps':ntemps,
+                 'nsteps':nsteps,
+                 'nwalk':nwalk,
+                 'nburn':nburn,
+                 'thin':thin,
+                 'init_chains':init_chains,
+                 'result_path':result_path,
+                 'chain_path':chain_plot_path,
+                 'corner_path':corner_plot_path,                 
+                }
+
+with open('pickled\\mcmc_settings.pkl', 'wb') as handle:
+    pickle.dump(settings_dict, handle)
+```
+
+```{python}
+%run -i persist_calib_uncert.py
+```
+
+```{python}
+with open('pickled\\mcmc_results.pkl', 'rb') as handle:
+    result = pickle.load(handle)
+    
+cu.set_parameter_values(result.params, dataset)
+dataset.run_model()
+
+dataset.write_parameters_to_file('mcmc_map_params.dat')
+```
+
+```{python}
+highest_prob = np.argmax(result.lnprob)
+hp_loc = np.unravel_index(highest_prob, result.lnprob.shape)
+mle_soln = result.chain[hp_loc]
+print(highest_prob)
+print(mle_soln)
+```
+
+```{python}
+#par = result.params
+#TODO: automate this! (we don't want to set the computed ones, but we need them to recompute based on what we set)
+#par['T_melt'].set(value = mle_soln[0])
+#par['DDfmelt'].set(value = mle_soln[1])
+#par['DDfet'].set(value = mle_soln[2])
+#par['T_s'].set(value = mle_soln[3])
+#par['T_g'].set(value = mle_soln[4])
+#par['a_V'].set(value = mle_soln[5])
+#par['runoff_r'].set(value = mle_soln[6])
+#par['runoff_s'].set(value = mle_soln[7])
+#par['err_q']
+
+#cu.set_parameter_values(par, dataset)
+#dataset.run_model()
+#cu.print_goodness_of_fit(dataset, comparisons)
+#cu.plot_objective(dataset, comparisons)
+
+#dataset.write_parameters_to_file('mcmc_map_params.dat')
+```
+
+

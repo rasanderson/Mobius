@@ -14,3 +14,4 @@ json/json.hpp
 *.png
 *.pkl
 .Rproj.user
+.Rhistory
