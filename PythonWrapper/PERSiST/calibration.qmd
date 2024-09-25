@@ -84,7 +84,18 @@ spec.loader.exec_module(mobius_calib_uncert_lmfit)
 
 ```{python}
 #dataset = wr.DataSet.setup_from_parameter_and_input_files('..\..\Applications\IncaC\Boyne\persist_params_Boyne.dat', '..\..\Applications\IncaC\Boyne\incac_inputs_Boyne.dat')
-dataset = wr.DataSet.setup_from_parameter_and_input_files('..\..\Applications\Persist\Tarland\persist_params_Tarland.dat', '..\..\Applications\Persist\Tarland\persist_inputs_Tarland.dat')
+#dataset = wr.DataSet.setup_from_parameter_and_input_files('..\..\Applications\Persist\Tarland\persist_params_Tarland.dat', '..\..\Applications\Persist\Tarland\persist_inputs_Tarland.dat')
+
+# Construct the paths to the parameter and input files
+# Should be dynamic
+#params_path = os.path.join(parent_dir, "Applications", "Persist", "Tarland", "persist_params_Tarland.dat")
+#inputs_path = os.path.join(parent_dir, "Applications", "Persist", "Tarland", "persist_inputs_Tarland.dat")
+# Have to hard-code
+params_path = "/home/nras/Mobius/Applications/Persist/Tarland/persist_params_Tarland.dat"
+inputs_path = "/home/nras/Mobius/Applications/Persist/Tarland/persist_inputs_Tarland.dat"
+
+# Use the dynamically constructed paths
+dataset = mobius.DataSet.setup_from_parameter_and_input_files(params_path, inputs_path)
 ```
 
 ```{python}
@@ -96,7 +107,9 @@ comparisons = [
 ```{python}
 index_short_name = {'All':'A', 'Quick':'q', 'Soilwater':'s', 'Groundwater':'g', 'Coull':'r'}
 
-param_df = cu.get_double_parameters_as_dataframe(dataset, index_short_name=index_short_name)
+#param_df = cu.get_double_parameters_as_dataframe(dataset, index_short_name=index_short_name)
+param_df = mobius_calib_uncert_lmfit.get_double_parameters_as_dataframe(dataset, index_short_name=index_short_name)
+
 pd.options.display.max_rows = 999
 param_df
 ```
@@ -104,8 +117,20 @@ param_df
 ```{python}
 #| scrolled: true
 dataset.run_model()
-cu.print_goodness_of_fit(dataset, comparisons)
-cu.plot_objective(dataset, comparisons)
+# Print goodness of fit
+mobius_calib_uncert_lmfit.print_goodness_of_fit(dataset, comparisons)
+
+# Plot objective
+mobius_calib_uncert_lmfit.plot_objective(dataset, comparisons)
+plt.show()
+```dataset.run_model()
+# Print goodness of fit
+mobius_calib_uncert_lmfit.print_goodness_of_fit(dataset, comparisons)
+
+# Plot objective
+mobius_calib_uncert_lmfit.plot_objective(dataset, comparisons)
+# If running line-by-line then uncomment next line
+#plt.show()
 ```
 
 ```{python}
