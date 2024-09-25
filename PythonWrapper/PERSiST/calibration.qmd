@@ -5,25 +5,33 @@ import sys
 import subprocess
 
 print(sys.executable)
-subprocess.run(["pip", "list"])
+# Uncomment next line to show installed packages
+# subprocess.run(["pip", "list"])
 
 ```
 
 ```{python}
-# import matplotlib.pyplot as plt
-# %matplotlib inline
-# Switch to ''%matplotlib ipympl' for interactive plots
 import matplotlib.pyplot as plt
-plt.switch_backend('module://matplotlib_inline.backend_inline')
+# Uncomment next line for interactive plots
+# %matplotlib ipympl
+# Next line not needed for Quarto as just for Jupyter
+# plt.switch_backend('module://matplotlib_inline.backend_inline')
 import warnings
 import imp
 import pickle
 import lmfit
+import os
 import pandas as pd
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import datetime as dt
+
+# imp has been deprecated in Python 3.4+ in favour of importlib
+import importlib
+
+# networkx is needed in calibration routine. Put it explicitly here
+import networkx
 
 # Styling
 warnings.filterwarnings("ignore")
@@ -31,14 +39,47 @@ plt.style.use('ggplot')
 ```
 
 ```{python}
-# Initialise wrapper and test datasets
-wrapper_fpath = (r"..\mobius.py")
-wr = imp.load_source('mobius', wrapper_fpath)
-wr.initialize('..\..\Applications\Persist\persist.dll')
+# Initialise wrapper and test datasets (original imp code)
+# wrapper_fpath = (r"..\mobius.py")
+# wr = imp.load_source('mobius', wrapper_fpath)
+# wr.initialize('..\..\Applications\Persist\persist.dll')
+
+
+# Get the current working directory
+current_dir = os.getcwd()
+
+# Get the parent directory
+parent_dir = os.path.dirname(current_dir)
+
+# Construct the full path to the mobius.py file
+wrapper_fpath = os.path.join(parent_dir, "mobius.py")
+
+# Load the module
+spec = importlib.util.spec_from_file_location("mobius", wrapper_fpath)
+mobius = importlib.util.module_from_spec(spec)
+sys.modules["mobius"] = mobius
+spec.loader.exec_module(mobius)
+# Initialize with the correct path
+# Ideally set dynamically based on the current working directory but error
+#dll_path = os.path.join("..", parent_dir, "Applications", "Persist", "persist.dll")
+dll_path = "/home/nras/Mobius/Applications/Persist/persist.so"
+mobius.initialize(dll_path)
+
 
 # Calibration functions
-calib_fpath = (r"..\mobius_calib_uncert_lmfit.py")
-cu = imp.load_source('mobius_calib_uncert_lmfit', calib_fpath)
+#calib_fpath = (r"..\mobius_calib_uncert_lmfit.py")
+#cu = imp.load_source('mobius_calib_uncert_lmfit', calib_fpath)
+calib_fpath = os.path.join(parent_dir, "mobius_calib_uncert_lmfit.py")
+# Load the module. I've added lots of comments to help me understand
+# Create a module specification (spec) for the module named mobius_calib_uncert_lmfit from the file located at calib_fpath. The specification contains information about how to load the module.
+spec = importlib.util.spec_from_file_location("mobius_calib_uncert_lmfit", calib_fpath)
+# Create a new module object (mobius_calib_uncert_lmfit) based on the specification created in the previous step. This module object is essentially an empty container that will be populated with the module’s contents.
+mobius_calib_uncert_lmfit = importlib.util.module_from_spec(spec)
+# Add the newly created module object to the sys.modules dictionary under the key "mobius_calib_uncert_lmfit". This step is important because it ensures that the module can be imported and accessed by other parts of the code using the standard import mechanism.
+sys.modules["mobius_calib_uncert_lmfit"] = mobius_calib_uncert_lmfit
+# Execute the module’s code within the context of the newly created module object. It effectively loads the module’s contents (functions, classes, variables, etc.) into the module object, making them available for use.
+spec.loader.exec_module(mobius_calib_uncert_lmfit)
+
 ```
 
 ```{python}
