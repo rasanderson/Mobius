@@ -126,14 +126,6 @@ mobius_calib_uncert_lmfit.print_goodness_of_fit(dataset, comparisons)
 # Plot objective
 mobius_calib_uncert_lmfit.plot_objective(dataset, comparisons)
 plt.show()
-```dataset.run_model()
-# Print goodness of fit
-mobius_calib_uncert_lmfit.print_goodness_of_fit(dataset, comparisons)
-
-# Plot objective
-mobius_calib_uncert_lmfit.plot_objective(dataset, comparisons)
-# If running line-by-line then uncomment next line
-#plt.show()
 ```
 
 ```{python}
