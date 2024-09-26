@@ -33,6 +33,9 @@ import importlib
 # networkx is needed in calibration routine. Put it explicitly here
 import networkx
 
+# numdifftools seems to be needed for some calibration functions
+import numdifftools
+
 # Styling
 warnings.filterwarnings("ignore")
 plt.style.use('ggplot')
@@ -143,7 +146,7 @@ calib_df
 ```
 
 ```{python}
-params = cu.parameter_df_to_lmfit(calib_df)
+params = mobius_calib_uncert_lmfit.parameter_df_to_lmfit(calib_df)
 
 params['perc_A_s_g'].set(expr = '1.0-perc_A_s_s')
 params['Tc_s_A'].min = 1.0
@@ -156,14 +159,14 @@ params
 
 ```{python}
 #| scrolled: true
-%%time
-mi, res = cu.minimize_residuals(params, dataset, comparisons, method='nelder', norm=False, skip_timesteps=365)
+
+mi, res = mobius_calib_uncert_lmfit.minimize_residuals(params, dataset, comparisons, method='nelder', norm=False, skip_timesteps=365)
 print('Optimization results\n')
 lmfit.report_fit(res)
 print('\n\nOptimized parameter values:\n')
 res.params.pretty_print(precision=3)
 
-cu.set_parameter_values(res.params, dataset)
+mobius_calib_uncert_lmfit.set_parameter_values(res.params, dataset)
 dataset.write_parameters_to_file('optimized_params.dat')
 ```
 
