@@ -36,6 +36,9 @@ import networkx
 # numdifftools seems to be needed for some calibration functions
 import numdifftools
 
+# runpy needed to execute Python files in Quarto
+import runpy
+
 # Styling
 warnings.filterwarnings("ignore")
 plt.style.use('ggplot')
@@ -215,7 +218,7 @@ with open('pickled/mcmc_settings.pkl', 'wb') as handle:
 ```
 
 ```{python}
-%run -i persist_calib_uncert.py
+runpy.run_path('persist_calib_uncert.py')
 ```
 
 ```{python}

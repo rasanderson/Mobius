@@ -1,16 +1,25 @@
 import numpy as np
-import imp
+import importlib.util
 import pickle
 from scipy.stats import norm
+import os
 
 # Initialise wrapper
-wrapper_fpath = (r"..\mobius.py")
-wr = imp.load_source('mobius', wrapper_fpath)
-wr.initialize('..\..\Applications\Persist\persist.dll')
+# Note that the paths assume /home/nras/Mobius/ as the root directory
+# Correct path to mobius.py
+# Get the current working directory
+current_dir = os.getcwd()
+wrapper_fpath = os.path.join(current_dir, 'PythonWrapper', 'mobius.py')
+spec = importlib.util.spec_from_file_location('mobius', wrapper_fpath)
+wr = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(wr)
+wr.initialize('Applications/Persist/persist.so')
 
 # Calibration functions
-calib_fpath = (r"..\mobius_calib_uncert_lmfit.py")
-cu = imp.load_source('mobius_calib_uncert_lmfit', calib_fpath)
+calib_fpath = os.path.join(current_dir, 'PythonWrapper', 'mobius_calib_uncert_lmfit.py')
+spec = importlib.util.spec_from_file_location('mobius_calib_uncert_lmfit', calib_fpath)
+cu = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(cu)
 
 def log_likelihood(params, error_param_dict, comparisons, skip_timesteps=0):
     """ Log-likelihood assuming heteroscedastic Gaussian errors.
@@ -59,7 +68,9 @@ def log_likelihood(params, error_param_dict, comparisons, skip_timesteps=0):
 
 ###################################################################################################################
 
+dataset_fpath = os.path.join(current_dir, 'Applications', 'Persist', 'optimized_params.dat')
 dataset = wr.DataSet.setup_from_parameter_and_input_files('..\..\Applications\Persist\Haelva\optimized_params.dat', '..\..\Applications\Persist\Haelva\persist_inputs_Haelva.dat')
+#dataset = wr.DataSet.setup_from_parameter_and_input_files('..\..\Applications\Persist\Haelva\optimized_params.dat', '..\..\Applications\Persist\Haelva\persist_inputs_Haelva.dat')
 
 if __name__ == '__main__': # NOTE: this is necessary for parallelisation!
     
