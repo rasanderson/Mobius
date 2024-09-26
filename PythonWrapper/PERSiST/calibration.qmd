@@ -173,8 +173,9 @@ dataset.write_parameters_to_file('optimized_params.dat')
 ```{python}
 #| scrolled: false
 dataset.run_model()
-cu.print_goodness_of_fit(dataset, comparisons)
-cu.plot_objective(dataset, comparisons)
+mobius_calib_uncert_lmfit.print_goodness_of_fit(dataset, comparisons)
+mobius_calib_uncert_lmfit.plot_objective(dataset, comparisons)
+plt.show()
 ```
 
 ```{python}
@@ -194,9 +195,9 @@ nburn    = 1000
 thin     = 1
 init_chains = 'uniform'
 skip_timesteps = 365
-result_path = r'pickled\\mcmc_results.pkl'
-chain_plot_path = r'plots\\chains.png'
-corner_plot_path = r'plots\\corner.png'
+result_path = 'pickled/mcmc_results.pkl'
+chain_plot_path = 'plots/chains.png'
+corner_plot_path = 'plots/corner.png'
 
 settings_dict = {'params':res.params,
                  'error_param_dict':error_param_dict,
@@ -214,7 +215,10 @@ settings_dict = {'params':res.params,
                  'corner_path':corner_plot_path,                 
                 }
 
-with open('pickled\\mcmc_settings.pkl', 'wb') as handle:
+# Ensure the directory exists
+os.makedirs('pickled', exist_ok=True)
+
+with open('pickled/mcmc_settings.pkl', 'wb') as handle:
     pickle.dump(settings_dict, handle)
 ```
 
