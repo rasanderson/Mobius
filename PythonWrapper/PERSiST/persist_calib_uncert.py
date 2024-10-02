@@ -110,11 +110,11 @@ if __name__ == '__main__': # NOTE: this is necessary for parallelisation!
     cu.chain_plot(result, file_name=chain_path)
     # cu.triangle_plot(result, nburn, thin, file_name=corner_path)
     # 
-    # # MAP simulation
-    # cu.set_parameter_values(result.params, dataset)
-    # dataset.run_model()
-    # cu.plot_objective(dataset, comparisons)
-    # 
-    # # Goodness-of-fit stats
-    # cu.gof_stats_map(result, dataset, comparisons, skip_timesteps)
+    # MAP simulation
+    cu.set_parameter_values(result.params, dataset)
+    dataset.run_model()
+    cu.plot_objective(dataset, comparisons)
+     
+    # Goodness-of-fit stats
+    cu.gof_stats(result, dataset, comparisons, skip_timesteps, use_stat = None)
 
