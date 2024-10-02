@@ -218,7 +218,9 @@ with open('pickled/mcmc_settings.pkl', 'wb') as handle:
 ```
 
 ```{python}
-runpy.run_path('/home/nras/Mobius/PythonWrapper/PERSiST/persist_calib_uncert.py')
+os.chdir('/home/nras/Mobius')
+#runpy.run_path('/home/nras/Mobius/PythonWrapper/PERSiST/persist_calib_uncert.py')
+!python /home/nras/Mobius/PythonWrapper/PERSiST/persist_calib_uncert.py
 ```
 
 ```{python}
