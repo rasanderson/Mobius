@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 # Next line not needed for Quarto as just for Jupyter
 # plt.switch_backend('module://matplotlib_inline.backend_inline')
 import warnings
-import imp
+#import imp
 import pickle
 import lmfit
 import os
@@ -176,7 +176,7 @@ plt.show()
 ```{python}
 res.params.add('err_q', value = 0.5, min = 0.05, max = 3)
 
-error_param_dict = {'Observed flow': 'err_q'}
+error_param_dict = {'observed Q': 'err_q'}
 
 res.params
 ```
@@ -184,15 +184,15 @@ res.params
 ```{python}
 nworkers = 8
 ntemps   = 1
-nsteps   = 10000
-nwalk    = 100
-nburn    = 1000
+nsteps   = 150 # 10000
+nwalk    = 50 # 100
+nburn    = 100 # 1000
 thin     = 1
 init_chains = 'uniform'
 skip_timesteps = 365
-result_path = 'pickled/mcmc_results.pkl'
-chain_plot_path = 'plots/chains.png'
-corner_plot_path = 'plots/corner.png'
+result_path = '/home/nras/Mobius/PythonWrapper/PERSiST/pickled/mcmc_results.pkl'
+chain_plot_path = '/home/nras/Mobius/PythonWrapper/PERSiST/plots/chains.png'
+corner_plot_path = '/home/nras/Mobius/PythonWrapper/PERSiST/plots/corner.png'
 
 settings_dict = {'params':res.params,
                  'error_param_dict':error_param_dict,
@@ -218,7 +218,9 @@ with open('pickled/mcmc_settings.pkl', 'wb') as handle:
 ```
 
 ```{python}
-runpy.run_path('persist_calib_uncert.py')
+os.chdir('/home/nras/Mobius')
+#runpy.run_path('/home/nras/Mobius/PythonWrapper/PERSiST/persist_calib_uncert.py')
+!python /home/nras/Mobius/PythonWrapper/PERSiST/persist_calib_uncert.py
 ```
 
 ```{python}
