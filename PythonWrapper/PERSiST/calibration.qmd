@@ -224,10 +224,11 @@ os.chdir('/home/nras/Mobius')
 ```
 
 ```{python}
-with open('pickled\\mcmc_results.pkl', 'rb') as handle:
+with open('/home/nras/Mobius/PythonWrapper/PERSiST/pickled/mcmc_results.pkl', 'rb') as handle:
     result = pickle.load(handle)
     
-cu.set_parameter_values(result.params, dataset)
+#cu.set_parameter_values(result.params, dataset)
+mobius_calib_uncert_lmfit.set_parameter_values(result.params, dataset)
 dataset.run_model()
 
 dataset.write_parameters_to_file('mcmc_map_params.dat')
@@ -242,24 +243,31 @@ print(mle_soln)
 ```
 
 ```{python}
-#par = result.params
 #TODO: automate this! (we don't want to set the computed ones, but we need them to recompute based on what we set)
-#par['T_melt'].set(value = mle_soln[0])
-#par['DDfmelt'].set(value = mle_soln[1])
-#par['DDfet'].set(value = mle_soln[2])
-#par['T_s'].set(value = mle_soln[3])
-#par['T_g'].set(value = mle_soln[4])
-#par['a_V'].set(value = mle_soln[5])
-#par['runoff_r'].set(value = mle_soln[6])
-#par['runoff_s'].set(value = mle_soln[7])
-#par['err_q']
+par = result.params
+par['Msnow_A'].set(value = mle_soln[0])
+par['Tsnow_A'].set(value = mle_soln[1])
+par['DDFmelt_A'].set(value = mle_soln[2])
+par['DDET_A'].set(value = mle_soln[3])
+par['Tc_s_A'].set(value = mle_soln[4])
+par['Tc_g_A'].set(value = mle_soln[5])
+par['perc_A_s_s'].set(value = mle_soln[6])
+par['perc_A_s_g'].set(value = mle_soln[7])
+par['err_q']
 
 #cu.set_parameter_values(par, dataset)
-#dataset.run_model()
+mobius_calib_uncert_lmfit.set_parameter_values(par, dataset)
+dataset.run_model()
+
+mobius_calib_uncert_lmfit.print_goodness_of_fit(dataset, comparisons)
+mobius_calib_uncert_lmfit.plot_objective(dataset, comparisons)
+plt.show()
+
+
 #cu.print_goodness_of_fit(dataset, comparisons)
 #cu.plot_objective(dataset, comparisons)
 
-#dataset.write_parameters_to_file('mcmc_map_params.dat')
+dataset.write_parameters_to_file('mcmc_map_params.dat')
 ```
 
 
