@@ -2,7 +2,7 @@ start_date :  1994-01-01
 timesteps :  2557 
 
 additional_timeseries : 
-"observed Q mm/day"
+"observed Q"
 
 inputs : 
 
@@ -5126,7 +5126,7 @@ inputs :
 10.11544
 
 
-"observed Q mm/day" :
+"observed Q" :
 1994-01-01		45.46
 1994-01-02		44.37
 1994-01-03		72.64

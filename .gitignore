@@ -21,4 +21,5 @@ mcmc_map_params.dat
 calibration.html
 PythonWrapper/PERSiST/calibration.ipynb
 PythonWrapper/PERSiST/calibration_files/*
+PythonWrapper/PERSiST/tweed_calibration_files/*
 

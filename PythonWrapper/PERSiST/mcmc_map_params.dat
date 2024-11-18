@@ -1,19 +1,19 @@
-# Parameter file generated for model PERSiST, containing modules (PERSiST V1.4) at 2024-10-10 11:03:49
+# Parameter file generated for model PERSiST, containing modules (PERSiST V1.4) at 2024-11-18 15:34:41
 
 index_sets:
 "Landscape units" : {"All"}
 "Soils" : {"Quick" "Soilwater" "Groundwater"}
-"Reaches" : {"Coull"}
+"Reaches" : {"UpperTweed"}
 
 parameters:
 
 # System (no index sets) #
 
 "Start date" :     # [1000-01-01, 3000-01-01] The start date is inclusive
-2002-08-01
+1994-01-01
 
 "Timesteps" :     #(days) [0, 18446744073709551615]
-1826
+2557
 
 
 { module "PERSiST" version "1.4"
@@ -27,13 +27,13 @@ parameters:
 	# Hydrology by land class ("Landscape units") #
 
 	"Snow multiplier" :     #(dimensionless) [0.5, 1.5] Adjustment factor used to account for bias in the relationship between snow measured in the gauge and effective snowfall amounts falling
-	0.85905342650717
+	0.823990964452795
 
 	"Snow melt temperature" :     #(°C) [-4, 4] The temperature at or above which snow can melt
-	0.752360206755714
+	1.53615635455878
 
 	"Degree day melt factor" :     #(mm/°C/day) [1, 4] Describes the dependency of snow melt rates on temperature. The parameter represents the number of millimetres water melted per degree celcius above the snow melt temperature
-	2.04156609118998
+	3.49678998055578
 
 	"Rain multiplier" :     #(dimensionless) [0.5, 1.5] Adjustment factor used to account for bias in the relationship between rain measured in the gauge and effective rainfall amounts falling
 	1
@@ -42,7 +42,7 @@ parameters:
 	0
 
 	"Degree day evapotranspiration" :     #(mm/°C/day) [0.05, 0.2] Describes the baseline dependency of evapotranspiration on air temperature. The parameter represents the number of millimetres water evapotranspired per degree celcius above the growing degree threshold when evapotranspiration rates are not soil moisture limited
-	0.16283658877735
+	0.162462878722202
 
 	"Growing degree threshold" :     #(°C) [-4, 4] The temperature at or above which plant growth and hence evapotranspiration are assumed to occur
 	-1
@@ -80,8 +80,8 @@ parameters:
 
 	"Time constant" :     #(days) [1, 9999] The inverse of the rate at which water flows out of a box
 	1
-	6.59825685481118
-	120.466212622971
+	6.18477513164133
+	172.656659233
 
 	"Evapotranspiration adjustment" :     #(dimensionless) [0, 10] A factor to slow the rate of evapotranspiration when the depth of water in a box is below the retained water depth. Special  values include 0 (no slowing of evapotranspiration, 1 (slowing is proportional to the depth of water remaining in the bucket) and values above 10 (all evapotranspiration effectively stops when the depth of water is below the retained water depth)
 	0
@@ -108,10 +108,10 @@ parameters:
 	# Reach and subcatchment characteristics ("Reaches") #
 
 	"Terrestrial catchment area" :     #(km2) [0.01, 999999] The terrestrial area of a subcatchment, excluding open water
-	50.6
+	1800
 
 	"Reach length" :     #(m) [1, 999999] The length of the main stem of the stream / reach in a subcatchment
-	9300
+	160000
 
 	"Reach bottom width" :     #(m) [0.1, 9999] The bottom width of the main stem of the stream / reach in a subcatchment
 	2
@@ -154,7 +154,7 @@ parameters:
 
 	"Percolation matrix" :     #(dimensionless) [0, 1] The fraction of runoff that goes from one box to another
 	0 1 0
-	1 0.385556798886848 0.614443201113152
+	1 0.745077586423227 0.346372441266796
 	1 0 1
 
 

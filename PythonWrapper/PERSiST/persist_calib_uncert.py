@@ -72,7 +72,9 @@ def log_likelihood(params, error_param_dict, comparisons, skip_timesteps=0):
 
 #dataset_fpath = os.path.join(current_dir, 'Applications', 'Persist', 'optimized_params.dat')
 
-dataset = wr.DataSet.setup_from_parameter_and_input_files('/home/nras/Mobius/PythonWrapper/PERSiST/optimized_params.dat', '/home/nras/Mobius/Applications/Persist/Tarland/persist_inputs_Tarland.dat')
+dataset = wr.DataSet.setup_from_parameter_and_input_files('/home/nras/Mobius/PythonWrapper/PERSiST/optimized_params.dat', '/home/nras/Mobius/tweed_persist/BasinObs_upper_datainputs.dat')
+
+#dataset = wr.DataSet.setup_from_parameter_and_input_files('/home/nras/Mobius/PythonWrapper/PERSiST/optimized_params.dat', '/home/nras/Mobius/Applications/Persist/Tarland/persist_inputs_Tarland.dat')
 #dataset = wr.DataSet.setup_from_parameter_and_input_files('..\..\Applications\Persist\Haelva\optimized_params.dat', '..\..\Applications\Persist\Haelva\persist_inputs_Haelva.dat')
 
 if __name__ == '__main__': # NOTE: this is necessary for parallelisation!

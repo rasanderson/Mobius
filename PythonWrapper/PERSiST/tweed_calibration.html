@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>tweed_calibration</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="tweed_calibration_files/libs/clipboard/clipboard.min.js"></script>
+<script src="tweed_calibration_files/libs/quarto-html/quarto.js"></script>
+<script src="tweed_calibration_files/libs/quarto-html/popper.min.js"></script>
+<script src="tweed_calibration_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="tweed_calibration_files/libs/quarto-html/anchor.min.js"></script>
+<link href="tweed_calibration_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="tweed_calibration_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="tweed_calibration_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="tweed_calibration_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="tweed_calibration_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">PERSiST hydrological model</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>This is based on the Tarland example calibration, for the Tweed. Splits the Tweed into an ‘upper’ and ‘lower’ catchment.</p>
+<div class="cell" data-execution_count="1">
+<div class="cell-output cell-output-stdout">
+<pre><code>/home/nras/anaconda3/envs/mobius/bin/python</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="cell-output cell-output-display" data-execution_count="6">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">name</th>
+<th data-quarto-table-cell-role="th">short_name</th>
+<th data-quarto-table-cell-role="th">unit</th>
+<th data-quarto-table-cell-role="th">index</th>
+<th data-quarto-table-cell-role="th">min_value</th>
+<th data-quarto-table-cell-role="th">initial_value</th>
+<th data-quarto-table-cell-role="th">max_value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Solver resolution</td>
+<td></td>
+<td>dimensionless</td>
+<td>()</td>
+<td>0.001000</td>
+<td>0.10</td>
+<td>0.5</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Snow multiplier</td>
+<td>Msnow_A</td>
+<td>dimensionless</td>
+<td>(All,)</td>
+<td>0.500000</td>
+<td>1.00</td>
+<td>1.5</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Snow melt temperature</td>
+<td>Tsnow_A</td>
+<td>°C</td>
+<td>(All,)</td>
+<td>-4.000000</td>
+<td>0.00</td>
+<td>4.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Degree day melt factor</td>
+<td>DDFmelt_A</td>
+<td>mm/°C/day</td>
+<td>(All,)</td>
+<td>1.000000</td>
+<td>3.00</td>
+<td>4.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Rain multiplier</td>
+<td>Mrain_A</td>
+<td>dimensionless</td>
+<td>(All,)</td>
+<td>0.500000</td>
+<td>1.00</td>
+<td>1.5</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>Initial snow depth</td>
+<td></td>
+<td>mm SWE</td>
+<td>(All,)</td>
+<td>0.000000</td>
+<td>0.00</td>
+<td>9999.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>Degree day evapotranspiration</td>
+<td>DDET_A</td>
+<td>mm/°C/day</td>
+<td>(All,)</td>
+<td>0.050000</td>
+<td>0.20</td>
+<td>0.2</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>Growing degree threshold</td>
+<td>Tgrow_A</td>
+<td>°C</td>
+<td>(All,)</td>
+<td>-4.000000</td>
+<td>-1.00</td>
+<td>4.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>Canopy interception</td>
+<td>canop_A</td>
+<td>mm/day</td>
+<td>(All,)</td>
+<td>0.000000</td>
+<td>0.00</td>
+<td>0.3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>Initial water depth</td>
+<td></td>
+<td>mm</td>
+<td>(Quick, All)</td>
+<td>0.000000</td>
+<td>0.00</td>
+<td>9999.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>Initial water depth</td>
+<td></td>
+<td>mm</td>
+<td>(Soilwater, All)</td>
+<td>0.000000</td>
+<td>300.00</td>
+<td>9999.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">11</td>
+<td>Initial water depth</td>
+<td></td>
+<td>mm</td>
+<td>(Groundwater, All)</td>
+<td>0.000000</td>
+<td>15.00</td>
+<td>9999.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12</td>
+<td>Relative area index</td>
+<td></td>
+<td>dimensionless</td>
+<td>(Quick, All)</td>
+<td>0.000000</td>
+<td>1.00</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">13</td>
+<td>Relative area index</td>
+<td></td>
+<td>dimensionless</td>
+<td>(Soilwater, All)</td>
+<td>0.000000</td>
+<td>1.00</td>
+<td>1.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">14</td>
+<td>Relative area index</td>
+<td></td>
+<td>dimensionless</td>
+<td>(Groundwater, All)</td>
+<td>0.000000</td>
+<td>1.00</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">15</td>
+<td>Infiltration</td>
+<td>inf_q_A</td>
+<td>mm/day</td>
+<td>(Quick, All)</td>
+<td>0.000000</td>
+<td>1000.00</td>
+<td>500.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16</td>
+<td>Infiltration</td>
+<td>inf_s_A</td>
+<td>mm/day</td>
+<td>(Soilwater, All)</td>
+<td>0.000000</td>
+<td>100.00</td>
+<td>500.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17</td>
+<td>Infiltration</td>
+<td>inf_g_A</td>
+<td>mm/day</td>
+<td>(Groundwater, All)</td>
+<td>0.000000</td>
+<td>20.00</td>
+<td>500.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">18</td>
+<td>Retained water depth</td>
+<td></td>
+<td>mm</td>
+<td>(Quick, All)</td>
+<td>0.000000</td>
+<td>0.00</td>
+<td>100000.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">19</td>
+<td>Retained water depth</td>
+<td></td>
+<td>mm</td>
+<td>(Soilwater, All)</td>
+<td>0.000000</td>
+<td>300.00</td>
+<td>100000.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20</td>
+<td>Retained water depth</td>
+<td></td>
+<td>mm</td>
+<td>(Groundwater, All)</td>
+<td>0.000000</td>
+<td>0.00</td>
+<td>100000.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">21</td>
+<td>Drought runoff fraction</td>
+<td>drought_q_A</td>
+<td>dimensionless</td>
+<td>(Quick, All)</td>
+<td>0.000000</td>
+<td>0.00</td>
+<td>0.5</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">22</td>
+<td>Drought runoff fraction</td>
+<td>drought_s_A</td>
+<td>dimensionless</td>
+<td>(Soilwater, All)</td>
+<td>0.000000</td>
+<td>0.10</td>
+<td>0.5</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">23</td>
+<td>Drought runoff fraction</td>
+<td>drought_g_A</td>
+<td>dimensionless</td>
+<td>(Groundwater, All)</td>
+<td>0.000000</td>
+<td>0.00</td>
+<td>0.5</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">24</td>
+<td>Time constant</td>
+<td>Tc_q_A</td>
+<td>days</td>
+<td>(Quick, All)</td>
+<td>1.000000</td>
+<td>1.00</td>
+<td>9999.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">25</td>
+<td>Time constant</td>
+<td>Tc_s_A</td>
+<td>days</td>
+<td>(Soilwater, All)</td>
+<td>1.000000</td>
+<td>3.00</td>
+<td>9999.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26</td>
+<td>Time constant</td>
+<td>Tc_g_A</td>
+<td>days</td>
+<td>(Groundwater, All)</td>
+<td>1.000000</td>
+<td>40.00</td>
+<td>9999.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">27</td>
+<td>Evapotranspiration adjustment</td>
+<td>Aevap_q_A</td>
+<td>dimensionless</td>
+<td>(Quick, All)</td>
+<td>0.000000</td>
+<td>0.00</td>
+<td>10.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">28</td>
+<td>Evapotranspiration adjustment</td>
+<td>Aevap_s_A</td>
+<td>dimensionless</td>
+<td>(Soilwater, All)</td>
+<td>0.000000</td>
+<td>3.50</td>
+<td>10.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">29</td>
+<td>Evapotranspiration adjustment</td>
+<td>Aevap_g_A</td>
+<td>dimensionless</td>
+<td>(Groundwater, All)</td>
+<td>0.000000</td>
+<td>0.00</td>
+<td>10.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">30</td>
+<td>Relative evapotranspiration index</td>
+<td></td>
+<td>dimensionless</td>
+<td>(Quick, All)</td>
+<td>0.000000</td>
+<td>0.00</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">31</td>
+<td>Relative evapotranspiration index</td>
+<td></td>
+<td>dimensionless</td>
+<td>(Soilwater, All)</td>
+<td>0.000000</td>
+<td>1.00</td>
+<td>1.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">32</td>
+<td>Relative evapotranspiration index</td>
+<td></td>
+<td>dimensionless</td>
+<td>(Groundwater, All)</td>
+<td>0.000000</td>
+<td>0.00</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">33</td>
+<td>Maximum capacity</td>
+<td></td>
+<td>mm</td>
+<td>(Quick, All)</td>
+<td>0.000000</td>
+<td>1000.00</td>
+<td>9999.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">34</td>
+<td>Maximum capacity</td>
+<td></td>
+<td>mm</td>
+<td>(Soilwater, All)</td>
+<td>0.000000</td>
+<td>430.00</td>
+<td>9999.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">35</td>
+<td>Maximum capacity</td>
+<td></td>
+<td>mm</td>
+<td>(Groundwater, All)</td>
+<td>0.000000</td>
+<td>300.00</td>
+<td>9999.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">36</td>
+<td>Terrestrial catchment area</td>
+<td></td>
+<td>km2</td>
+<td>(UpperTweed,)</td>
+<td>0.010000</td>
+<td>1800.00</td>
+<td>999999.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">37</td>
+<td>Reach length</td>
+<td></td>
+<td>m</td>
+<td>(UpperTweed,)</td>
+<td>1.000000</td>
+<td>160000.00</td>
+<td>999999.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">38</td>
+<td>Reach bottom width</td>
+<td></td>
+<td>m</td>
+<td>(UpperTweed,)</td>
+<td>0.100000</td>
+<td>2.00</td>
+<td>9999.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">39</td>
+<td>Reach bank slope</td>
+<td></td>
+<td>dimensionless</td>
+<td>(UpperTweed,)</td>
+<td>0.010000</td>
+<td>1.00</td>
+<td>10.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">40</td>
+<td>Reach slope</td>
+<td></td>
+<td>dimensionless</td>
+<td>(UpperTweed,)</td>
+<td>0.000001</td>
+<td>0.04</td>
+<td>0.2</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">41</td>
+<td>Manning's roughness coefficent</td>
+<td>Cmann_r</td>
+<td>s/(m^1/3)</td>
+<td>(UpperTweed,)</td>
+<td>0.010000</td>
+<td>0.04</td>
+<td>0.1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">42</td>
+<td>Snow threshold temperature</td>
+<td></td>
+<td>°C</td>
+<td>(UpperTweed,)</td>
+<td>-4.000000</td>
+<td>0.00</td>
+<td>4.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">43</td>
+<td>Reach snow multiplier</td>
+<td>RMsnow_r</td>
+<td>dimensionless</td>
+<td>(UpperTweed,)</td>
+<td>0.500000</td>
+<td>1.00</td>
+<td>2.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">44</td>
+<td>Reach rain multiplier</td>
+<td>RMrain_r</td>
+<td>dimensionless</td>
+<td>(UpperTweed,)</td>
+<td>0.500000</td>
+<td>1.00</td>
+<td>2.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">45</td>
+<td>Abstraction flow</td>
+<td></td>
+<td>m3/s</td>
+<td>(UpperTweed,)</td>
+<td>0.000000</td>
+<td>0.00</td>
+<td>9999.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">46</td>
+<td>Effluent flow</td>
+<td></td>
+<td>m3/s</td>
+<td>(UpperTweed,)</td>
+<td>0.000000</td>
+<td>0.00</td>
+<td>9999.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">47</td>
+<td>Initial stream flow</td>
+<td></td>
+<td>m3/s</td>
+<td>(UpperTweed,)</td>
+<td>0.000100</td>
+<td>0.87</td>
+<td>9999.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">48</td>
+<td>%</td>
+<td></td>
+<td>%</td>
+<td>(UpperTweed, All)</td>
+<td>0.000000</td>
+<td>100.00</td>
+<td>100.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">49</td>
+<td>Percolation matrix</td>
+<td>perc_A_q_q</td>
+<td>dimensionless</td>
+<td>(All, Quick, Quick)</td>
+<td>0.000000</td>
+<td>0.00</td>
+<td>1.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">50</td>
+<td>Percolation matrix</td>
+<td>perc_A_q_s</td>
+<td>dimensionless</td>
+<td>(All, Quick, Soilwater)</td>
+<td>0.000000</td>
+<td>1.00</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">51</td>
+<td>Percolation matrix</td>
+<td>perc_A_q_g</td>
+<td>dimensionless</td>
+<td>(All, Quick, Groundwater)</td>
+<td>0.000000</td>
+<td>0.00</td>
+<td>1.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">52</td>
+<td>Percolation matrix</td>
+<td>perc_A_s_q</td>
+<td>dimensionless</td>
+<td>(All, Soilwater, Quick)</td>
+<td>0.000000</td>
+<td>1.00</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">53</td>
+<td>Percolation matrix</td>
+<td>perc_A_s_s</td>
+<td>dimensionless</td>
+<td>(All, Soilwater, Soilwater)</td>
+<td>0.000000</td>
+<td>0.35</td>
+<td>1.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">54</td>
+<td>Percolation matrix</td>
+<td>perc_A_s_g</td>
+<td>dimensionless</td>
+<td>(All, Soilwater, Groundwater)</td>
+<td>0.000000</td>
+<td>0.65</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">55</td>
+<td>Percolation matrix</td>
+<td>perc_A_g_q</td>
+<td>dimensionless</td>
+<td>(All, Groundwater, Quick)</td>
+<td>0.000000</td>
+<td>1.00</td>
+<td>1.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">56</td>
+<td>Percolation matrix</td>
+<td>perc_A_g_s</td>
+<td>dimensionless</td>
+<td>(All, Groundwater, Soilwater)</td>
+<td>0.000000</td>
+<td>0.00</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">57</td>
+<td>Percolation matrix</td>
+<td>perc_A_g_g</td>
+<td>dimensionless</td>
+<td>(All, Groundwater, Groundwater)</td>
+<td>0.000000</td>
+<td>1.00</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="7">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Goodness of fit for Reach flow [UpperTweed] vs observed Q []:
+Mean error (bias): 1.164791
+Mean absolute error: 13.608717
+Root mean square error: 23.974661
+Nash-Sutcliffe coefficient: 0.699374
+Number of observations: 2557
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="tweed_calibration_files/figure-html/cell-8-output-2.png" width="1431" height="326"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="8">
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">name</th>
+<th data-quarto-table-cell-role="th">short_name</th>
+<th data-quarto-table-cell-role="th">unit</th>
+<th data-quarto-table-cell-role="th">index</th>
+<th data-quarto-table-cell-role="th">min_value</th>
+<th data-quarto-table-cell-role="th">initial_value</th>
+<th data-quarto-table-cell-role="th">max_value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Snow multiplier</td>
+<td>Msnow_A</td>
+<td>dimensionless</td>
+<td>(All,)</td>
+<td>0.50</td>
+<td>1.00</td>
+<td>1.5</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Snow melt temperature</td>
+<td>Tsnow_A</td>
+<td>°C</td>
+<td>(All,)</td>
+<td>-4.00</td>
+<td>0.00</td>
+<td>4.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Degree day melt factor</td>
+<td>DDFmelt_A</td>
+<td>mm/°C/day</td>
+<td>(All,)</td>
+<td>1.00</td>
+<td>3.00</td>
+<td>4.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Degree day evapotranspiration</td>
+<td>DDET_A</td>
+<td>mm/°C/day</td>
+<td>(All,)</td>
+<td>0.05</td>
+<td>0.20</td>
+<td>0.2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Time constant</td>
+<td>Tc_s_A</td>
+<td>days</td>
+<td>(Soilwater, All)</td>
+<td>1.00</td>
+<td>3.00</td>
+<td>9999.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>Time constant</td>
+<td>Tc_g_A</td>
+<td>days</td>
+<td>(Groundwater, All)</td>
+<td>1.00</td>
+<td>40.00</td>
+<td>9999.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>Percolation matrix</td>
+<td>perc_A_s_s</td>
+<td>dimensionless</td>
+<td>(All, Soilwater, Soilwater)</td>
+<td>0.00</td>
+<td>0.35</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>Percolation matrix</td>
+<td>perc_A_s_g</td>
+<td>dimensionless</td>
+<td>(All, Soilwater, Groundwater)</td>
+<td>0.00</td>
+<td>0.65</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="9">
+<div class="cell-output cell-output-display" data-execution_count="9">
+<table class="jp-toc-ignore table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Parameters</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;" data-quarto-table-cell-role="th">name</td>
+<td style="text-align: left;" data-quarto-table-cell-role="th">value</td>
+<td style="text-align: left;" data-quarto-table-cell-role="th">initial value</td>
+<td style="text-align: left;" data-quarto-table-cell-role="th">min</td>
+<td style="text-align: left;" data-quarto-table-cell-role="th">max</td>
+<td style="text-align: left;" data-quarto-table-cell-role="th">vary</td>
+<td style="text-align: right;" data-quarto-table-cell-role="th">expression</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Msnow_A</td>
+<td style="text-align: left;">1.00000000</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">0.50000000</td>
+<td style="text-align: left;">1.50000000</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tsnow_A</td>
+<td style="text-align: left;">0.00000000</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">-4.00000000</td>
+<td style="text-align: left;">4.00000000</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DDFmelt_A</td>
+<td style="text-align: left;">3.00000000</td>
+<td style="text-align: left;">3.0</td>
+<td style="text-align: left;">1.00000000</td>
+<td style="text-align: left;">4.00000000</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DDET_A</td>
+<td style="text-align: left;">0.20000000</td>
+<td style="text-align: left;">0.2</td>
+<td style="text-align: left;">0.05000000</td>
+<td style="text-align: left;">0.20000000</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tc_s_A</td>
+<td style="text-align: left;">3.00000000</td>
+<td style="text-align: left;">3.0</td>
+<td style="text-align: left;">1.00000000</td>
+<td style="text-align: left;">10.0000000</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tc_g_A</td>
+<td style="text-align: left;">40.0000000</td>
+<td style="text-align: left;">40.0</td>
+<td style="text-align: left;">30.0000000</td>
+<td style="text-align: left;">200.000000</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">perc_A_s_s</td>
+<td style="text-align: left;">0.35000000</td>
+<td style="text-align: left;">0.35</td>
+<td style="text-align: left;">0.00000000</td>
+<td style="text-align: left;">1.00000000</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">perc_A_s_g</td>
+<td style="text-align: left;">0.65000000</td>
+<td style="text-align: left;">0.65</td>
+<td style="text-align: left;">0.00000000</td>
+<td style="text-align: left;">1.00000000</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: right;">1.0-perc_A_s_s</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell" data-execution_count="10">
+<div class="cell-output cell-output-stdout">
+<pre><code>Optimization results
+
+[[Fit Statistics]]
+    # fitting method   = Nelder-Mead
+    # function evals   = 2548
+    # data points      = 2192
+    # variables        = 7
+    chi-square         = 815817.702
+    reduced chi-square = 373.371946
+    Akaike info crit   = 12989.2734
+    Bayesian info crit = 13029.1214
+[[Variables]]
+    Msnow_A:     0.93639551 +/- 0.02628376 (2.81%) (init = 1)
+    Tsnow_A:    -0.19344361 +/- 0.01159715 (6.00%) (init = 0)
+    DDFmelt_A:   1.12084416 +/- 0.03134174 (2.80%) (init = 3)
+    DDET_A:      0.19885274 +/- 9.8064e-06 (0.00%) (init = 0.2)
+    Tc_s_A:      4.38407502 +/- 0.00327268 (0.07%) (init = 3)
+    Tc_g_A:      199.999745 +/- 0.09315878 (0.05%) (init = 40)
+    perc_A_s_s:  0.66706808 +/- 0.00778311 (1.17%) (init = 0.35)
+    perc_A_s_g:  0.33293192 +/- 0.00778311 (2.34%) == '1.0-perc_A_s_s'
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(Msnow_A, DDFmelt_A) = +0.9948
+
+
+Optimized parameter values:
+
+Name           Value      Min      Max   Stderr     Vary     Expr Brute_Step
+DDET_A         0.199     0.05      0.2 9.81e-06     True     None     None
+DDFmelt_A       1.12        1        4   0.0313     True     None     None
+Msnow_A        0.936      0.5      1.5   0.0263     True     None     None
+Tc_g_A           200       30      200   0.0932     True     None     None
+Tc_s_A          4.38        1       10  0.00327     True     None     None
+Tsnow_A       -0.193       -4        4   0.0116     True     None     None
+perc_A_s_g     0.333        0        1  0.00778    False 1.0-perc_A_s_s     None
+perc_A_s_s     0.667        0        1  0.00778     True     None     None</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="11">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Goodness of fit for Reach flow [UpperTweed] vs observed Q []:
+Mean error (bias): 0.250949
+Mean absolute error: 11.185410
+Root mean square error: 20.419844
+Nash-Sutcliffe coefficient: 0.781914
+Number of observations: 2557
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="tweed_calibration_files/figure-html/cell-12-output-2.png" width="1431" height="326"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="12">
+<div class="cell-output cell-output-display" data-execution_count="12">
+<table class="jp-toc-ignore table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Parameters</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;" data-quarto-table-cell-role="th">name</td>
+<td style="text-align: left;" data-quarto-table-cell-role="th">value</td>
+<td style="text-align: left;" data-quarto-table-cell-role="th">standard error</td>
+<td style="text-align: left;" data-quarto-table-cell-role="th">relative error</td>
+<td style="text-align: left;" data-quarto-table-cell-role="th">initial value</td>
+<td style="text-align: left;" data-quarto-table-cell-role="th">min</td>
+<td style="text-align: left;" data-quarto-table-cell-role="th">max</td>
+<td style="text-align: left;" data-quarto-table-cell-role="th">vary</td>
+<td style="text-align: right;" data-quarto-table-cell-role="th">expression</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Msnow_A</td>
+<td style="text-align: left;">0.93639551</td>
+<td style="text-align: left;">0.02628376</td>
+<td style="text-align: left;">(2.81%)</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">0.50000000</td>
+<td style="text-align: left;">1.50000000</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tsnow_A</td>
+<td style="text-align: left;">-0.19344361</td>
+<td style="text-align: left;">0.01159715</td>
+<td style="text-align: left;">(6.00%)</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">-4.00000000</td>
+<td style="text-align: left;">4.00000000</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DDFmelt_A</td>
+<td style="text-align: left;">1.12084416</td>
+<td style="text-align: left;">0.03134174</td>
+<td style="text-align: left;">(2.80%)</td>
+<td style="text-align: left;">3.0</td>
+<td style="text-align: left;">1.00000000</td>
+<td style="text-align: left;">4.00000000</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DDET_A</td>
+<td style="text-align: left;">0.19885274</td>
+<td style="text-align: left;">9.8064e-06</td>
+<td style="text-align: left;">(0.00%)</td>
+<td style="text-align: left;">0.2</td>
+<td style="text-align: left;">0.05000000</td>
+<td style="text-align: left;">0.20000000</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tc_s_A</td>
+<td style="text-align: left;">4.38407502</td>
+<td style="text-align: left;">0.00327268</td>
+<td style="text-align: left;">(0.07%)</td>
+<td style="text-align: left;">3.0</td>
+<td style="text-align: left;">1.00000000</td>
+<td style="text-align: left;">10.0000000</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tc_g_A</td>
+<td style="text-align: left;">199.999745</td>
+<td style="text-align: left;">0.09315878</td>
+<td style="text-align: left;">(0.05%)</td>
+<td style="text-align: left;">40.0</td>
+<td style="text-align: left;">30.0000000</td>
+<td style="text-align: left;">200.000000</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">perc_A_s_s</td>
+<td style="text-align: left;">0.66706808</td>
+<td style="text-align: left;">0.00778311</td>
+<td style="text-align: left;">(1.17%)</td>
+<td style="text-align: left;">0.35</td>
+<td style="text-align: left;">0.00000000</td>
+<td style="text-align: left;">1.00000000</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">perc_A_s_g</td>
+<td style="text-align: left;">0.33293192</td>
+<td style="text-align: left;">0.00778311</td>
+<td style="text-align: left;">(2.34%)</td>
+<td style="text-align: left;">0.65</td>
+<td style="text-align: left;">0.00000000</td>
+<td style="text-align: left;">1.00000000</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: right;">1.0-perc_A_s_s</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">err_q</td>
+<td style="text-align: left;">0.50000000</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">0.5</td>
+<td style="text-align: left;">0.05000000</td>
+<td style="text-align: left;">3.00000000</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell" data-execution_count="14">
+<div class="cell-output cell-output-stdout">
+<pre><code>  0%|                                                   | 0/150 [00:00&lt;?, ?it/s]  1%|▎                                          | 1/150 [00:00&lt;00:48,  3.09it/s]  1%|▌                                          | 2/150 [00:00&lt;00:47,  3.09it/s]  2%|▊                                          | 3/150 [00:00&lt;00:47,  3.11it/s]  3%|█▏                                         | 4/150 [00:01&lt;00:47,  3.07it/s]  3%|█▍                                         | 5/150 [00:01&lt;00:43,  3.33it/s]  4%|█▋                                         | 6/150 [00:01&lt;00:44,  3.24it/s]  5%|██                                         | 7/150 [00:02&lt;00:43,  3.30it/s]  5%|██▎                                        | 8/150 [00:02&lt;00:48,  2.91it/s]  6%|██▌                                        | 9/150 [00:02&lt;00:47,  2.96it/s]  7%|██▊                                       | 10/150 [00:03&lt;00:47,  2.95it/s]  7%|███                                       | 11/150 [00:03&lt;00:47,  2.91it/s]  8%|███▎                                      | 12/150 [00:03&lt;00:46,  2.96it/s]  9%|███▋                                      | 13/150 [00:04&lt;00:44,  3.07it/s]  9%|███▉                                      | 14/150 [00:04&lt;00:48,  2.82it/s] 10%|████▏                                     | 15/150 [00:05&lt;00:47,  2.82it/s] 11%|████▍                                     | 16/150 [00:05&lt;00:48,  2.74it/s] 11%|████▊                                     | 17/150 [00:05&lt;00:46,  2.89it/s] 12%|█████                                     | 18/150 [00:06&lt;00:47,  2.80it/s] 13%|█████▎                                    | 19/150 [00:06&lt;00:45,  2.90it/s] 13%|█████▌                                    | 20/150 [00:06&lt;00:46,  2.77it/s] 14%|█████▉                                    | 21/150 [00:07&lt;00:48,  2.65it/s] 15%|██████▏                                   | 22/150 [00:07&lt;00:48,  2.63it/s] 15%|██████▍                                   | 23/150 [00:07&lt;00:47,  2.66it/s] 16%|██████▋                                   | 24/150 [00:08&lt;00:47,  2.66it/s] 17%|███████                                   | 25/150 [00:08&lt;00:48,  2.56it/s] 17%|███████▎                                  | 26/150 [00:09&lt;00:48,  2.55it/s] 18%|███████▌                                  | 27/150 [00:09&lt;00:50,  2.45it/s] 19%|███████▊                                  | 28/150 [00:09&lt;00:47,  2.57it/s] 19%|████████                                  | 29/150 [00:10&lt;00:48,  2.51it/s] 20%|████████▍                                 | 30/150 [00:10&lt;00:45,  2.61it/s] 21%|████████▋                                 | 31/150 [00:11&lt;00:46,  2.53it/s] 21%|████████▉                                 | 32/150 [00:11&lt;00:49,  2.39it/s] 22%|█████████▏                                | 33/150 [00:12&lt;00:48,  2.40it/s] 23%|█████████▌                                | 34/150 [00:12&lt;00:49,  2.33it/s] 23%|█████████▊                                | 35/150 [00:12&lt;00:49,  2.31it/s] 24%|██████████                                | 36/150 [00:13&lt;00:49,  2.28it/s] 25%|██████████▎                               | 37/150 [00:13&lt;00:49,  2.27it/s] 25%|██████████▋                               | 38/150 [00:14&lt;00:50,  2.24it/s] 26%|██████████▉                               | 39/150 [00:14&lt;00:49,  2.26it/s] 27%|███████████▏                              | 40/150 [00:15&lt;00:48,  2.25it/s] 27%|███████████▍                              | 41/150 [00:15&lt;00:49,  2.21it/s] 28%|███████████▊                              | 42/150 [00:16&lt;00:48,  2.21it/s] 29%|████████████                              | 43/150 [00:16&lt;00:49,  2.15it/s] 29%|████████████▎                             | 44/150 [00:17&lt;00:49,  2.15it/s] 30%|████████████▌                             | 45/150 [00:17&lt;00:48,  2.15it/s] 31%|████████████▉                             | 46/150 [00:18&lt;00:49,  2.12it/s] 31%|█████████████▏                            | 47/150 [00:18&lt;00:48,  2.11it/s] 32%|█████████████▍                            | 48/150 [00:18&lt;00:47,  2.13it/s] 33%|█████████████▋                            | 49/150 [00:19&lt;00:47,  2.11it/s] 33%|██████████████                            | 50/150 [00:19&lt;00:46,  2.14it/s] 34%|██████████████▎                           | 51/150 [00:20&lt;00:46,  2.12it/s] 35%|██████████████▌                           | 52/150 [00:20&lt;00:46,  2.12it/s] 35%|██████████████▊                           | 53/150 [00:21&lt;00:47,  2.05it/s] 36%|███████████████                           | 54/150 [00:21&lt;00:47,  2.01it/s] 37%|███████████████▍                          | 55/150 [00:22&lt;00:46,  2.04it/s] 37%|███████████████▋                          | 56/150 [00:22&lt;00:46,  2.04it/s] 38%|███████████████▉                          | 57/150 [00:23&lt;00:45,  2.04it/s] 39%|████████████████▏                         | 58/150 [00:23&lt;00:45,  2.04it/s] 39%|████████████████▌                         | 59/150 [00:24&lt;00:44,  2.04it/s] 40%|████████████████▊                         | 60/150 [00:24&lt;00:44,  2.03it/s] 41%|█████████████████                         | 61/150 [00:25&lt;00:43,  2.03it/s] 41%|█████████████████▎                        | 62/150 [00:25&lt;00:44,  1.98it/s] 42%|█████████████████▋                        | 63/150 [00:26&lt;00:44,  1.97it/s] 43%|█████████████████▉                        | 64/150 [00:26&lt;00:42,  2.00it/s] 43%|██████████████████▏                       | 65/150 [00:27&lt;00:41,  2.05it/s] 44%|██████████████████▍                       | 66/150 [00:27&lt;00:41,  2.02it/s] 45%|██████████████████▊                       | 67/150 [00:28&lt;00:40,  2.03it/s] 45%|███████████████████                       | 68/150 [00:28&lt;00:40,  2.02it/s] 46%|███████████████████▎                      | 69/150 [00:29&lt;00:39,  2.04it/s] 47%|███████████████████▌                      | 70/150 [00:29&lt;00:39,  2.00it/s] 47%|███████████████████▉                      | 71/150 [00:30&lt;00:40,  1.97it/s] 48%|████████████████████▏                     | 72/150 [00:31&lt;00:44,  1.76it/s] 49%|████████████████████▍                     | 73/150 [00:31&lt;00:42,  1.80it/s] 49%|████████████████████▋                     | 74/150 [00:32&lt;00:41,  1.82it/s] 50%|█████████████████████                     | 75/150 [00:32&lt;00:41,  1.80it/s] 51%|█████████████████████▎                    | 76/150 [00:33&lt;00:41,  1.77it/s] 51%|█████████████████████▌                    | 77/150 [00:33&lt;00:40,  1.79it/s] 52%|█████████████████████▊                    | 78/150 [00:34&lt;00:43,  1.65it/s] 53%|██████████████████████                    | 79/150 [00:35&lt;00:41,  1.70it/s] 53%|██████████████████████▍                   | 80/150 [00:35&lt;00:40,  1.75it/s] 54%|██████████████████████▋                   | 81/150 [00:36&lt;00:38,  1.79it/s] 55%|██████████████████████▉                   | 82/150 [00:36&lt;00:37,  1.80it/s] 55%|███████████████████████▏                  | 83/150 [00:37&lt;00:36,  1.83it/s] 56%|███████████████████████▌                  | 84/150 [00:37&lt;00:36,  1.82it/s] 57%|███████████████████████▊                  | 85/150 [00:38&lt;00:34,  1.88it/s] 57%|████████████████████████                  | 86/150 [00:38&lt;00:34,  1.87it/s] 58%|████████████████████████▎                 | 87/150 [00:39&lt;00:33,  1.87it/s] 59%|████████████████████████▋                 | 88/150 [00:39&lt;00:33,  1.86it/s] 59%|████████████████████████▉                 | 89/150 [00:40&lt;00:32,  1.86it/s] 60%|█████████████████████████▏                | 90/150 [00:40&lt;00:32,  1.85it/s] 61%|█████████████████████████▍                | 91/150 [00:41&lt;00:31,  1.86it/s] 61%|█████████████████████████▊                | 92/150 [00:42&lt;00:31,  1.85it/s] 62%|██████████████████████████                | 93/150 [00:42&lt;00:30,  1.86it/s] 63%|██████████████████████████▎               | 94/150 [00:43&lt;00:29,  1.88it/s] 63%|██████████████████████████▌               | 95/150 [00:43&lt;00:29,  1.89it/s] 64%|██████████████████████████▉               | 96/150 [00:44&lt;00:28,  1.87it/s] 65%|███████████████████████████▏              | 97/150 [00:44&lt;00:28,  1.88it/s] 65%|███████████████████████████▍              | 98/150 [00:45&lt;00:27,  1.88it/s] 66%|███████████████████████████▋              | 99/150 [00:45&lt;00:26,  1.90it/s] 67%|███████████████████████████▎             | 100/150 [00:46&lt;00:26,  1.87it/s] 67%|███████████████████████████▌             | 101/150 [00:46&lt;00:26,  1.87it/s] 68%|███████████████████████████▉             | 102/150 [00:47&lt;00:25,  1.85it/s] 69%|████████████████████████████▏            | 103/150 [00:47&lt;00:26,  1.80it/s] 69%|████████████████████████████▍            | 104/150 [00:48&lt;00:25,  1.82it/s] 70%|████████████████████████████▋            | 105/150 [00:49&lt;00:24,  1.82it/s] 71%|████████████████████████████▉            | 106/150 [00:49&lt;00:24,  1.82it/s] 71%|█████████████████████████████▏           | 107/150 [00:50&lt;00:23,  1.85it/s] 72%|█████████████████████████████▌           | 108/150 [00:50&lt;00:22,  1.87it/s] 73%|█████████████████████████████▊           | 109/150 [00:51&lt;00:22,  1.85it/s] 73%|██████████████████████████████           | 110/150 [00:51&lt;00:21,  1.85it/s] 74%|██████████████████████████████▎          | 111/150 [00:52&lt;00:21,  1.84it/s] 75%|██████████████████████████████▌          | 112/150 [00:52&lt;00:20,  1.85it/s] 75%|██████████████████████████████▉          | 113/150 [00:53&lt;00:19,  1.87it/s] 76%|███████████████████████████████▏         | 114/150 [00:53&lt;00:19,  1.89it/s] 77%|███████████████████████████████▍         | 115/150 [00:54&lt;00:18,  1.87it/s] 77%|███████████████████████████████▋         | 116/150 [00:54&lt;00:18,  1.86it/s] 78%|███████████████████████████████▉         | 117/150 [00:55&lt;00:17,  1.87it/s] 79%|████████████████████████████████▎        | 118/150 [00:55&lt;00:17,  1.87it/s] 79%|████████████████████████████████▌        | 119/150 [00:56&lt;00:16,  1.86it/s] 80%|████████████████████████████████▊        | 120/150 [00:57&lt;00:16,  1.86it/s] 81%|█████████████████████████████████        | 121/150 [00:57&lt;00:15,  1.87it/s] 81%|█████████████████████████████████▎       | 122/150 [00:58&lt;00:14,  1.89it/s] 82%|█████████████████████████████████▌       | 123/150 [00:58&lt;00:14,  1.87it/s] 83%|█████████████████████████████████▉       | 124/150 [00:59&lt;00:13,  1.87it/s] 83%|██████████████████████████████████▏      | 125/150 [00:59&lt;00:13,  1.86it/s] 84%|██████████████████████████████████▍      | 126/150 [01:00&lt;00:12,  1.85it/s] 85%|██████████████████████████████████▋      | 127/150 [01:00&lt;00:12,  1.85it/s] 85%|██████████████████████████████████▉      | 128/150 [01:01&lt;00:11,  1.85it/s] 86%|███████████████████████████████████▎     | 129/150 [01:01&lt;00:11,  1.81it/s] 87%|███████████████████████████████████▌     | 130/150 [01:02&lt;00:11,  1.79it/s] 87%|███████████████████████████████████▊     | 131/150 [01:03&lt;00:11,  1.71it/s] 88%|████████████████████████████████████     | 132/150 [01:03&lt;00:10,  1.70it/s] 89%|████████████████████████████████████▎    | 133/150 [01:04&lt;00:09,  1.74it/s] 89%|████████████████████████████████████▋    | 134/150 [01:04&lt;00:08,  1.79it/s] 90%|████████████████████████████████████▉    | 135/150 [01:05&lt;00:08,  1.84it/s] 91%|█████████████████████████████████████▏   | 136/150 [01:05&lt;00:07,  1.86it/s] 91%|█████████████████████████████████████▍   | 137/150 [01:06&lt;00:06,  1.86it/s] 92%|█████████████████████████████████████▋   | 138/150 [01:06&lt;00:06,  1.88it/s] 93%|█████████████████████████████████████▉   | 139/150 [01:07&lt;00:05,  1.90it/s] 93%|██████████████████████████████████████▎  | 140/150 [01:07&lt;00:05,  1.89it/s] 94%|██████████████████████████████████████▌  | 141/150 [01:08&lt;00:04,  1.90it/s] 95%|██████████████████████████████████████▊  | 142/150 [01:09&lt;00:04,  1.87it/s] 95%|███████████████████████████████████████  | 143/150 [01:09&lt;00:03,  1.87it/s] 96%|███████████████████████████████████████▎ | 144/150 [01:10&lt;00:03,  1.88it/s] 97%|███████████████████████████████████████▋ | 145/150 [01:10&lt;00:02,  1.89it/s] 97%|███████████████████████████████████████▉ | 146/150 [01:11&lt;00:02,  1.89it/s] 98%|████████████████████████████████████████▏| 147/150 [01:11&lt;00:01,  1.88it/s] 99%|████████████████████████████████████████▍| 148/150 [01:12&lt;00:01,  1.88it/s] 99%|████████████████████████████████████████▋| 149/150 [01:12&lt;00:00,  1.87it/s]100%|█████████████████████████████████████████| 150/150 [01:13&lt;00:00,  1.88it/s]100%|█████████████████████████████████████████| 150/150 [01:13&lt;00:00,  2.05it/s]
+The chain is shorter than 50 times the integrated autocorrelation time for 8 parameter(s). Use this estimate with caution and run a longer chain!
+N/50 = 3;
+tau: [14.85826385 17.18394766 13.88267783 16.3343847  15.05842147 16.95789699
+ 16.05716905 18.75710797]
+Time elapsed running emcee: 1.23 minutes.
+
+/home/nras/Mobius/PythonWrapper/mobius_calib_uncert_lmfit.py:239: FutureWarning: 'S' is deprecated and will be removed in a future version, please use 's' instead.
+  return pd.date_range(start=start_date, periods=timesteps, freq='%d%s%s' % (magnitude, type, 's' if type=='M' else ''))
+/home/nras/Mobius/PythonWrapper/mobius_calib_uncert_lmfit.py:586: FutureWarning: 'S' is deprecated and will be removed in a future version, please use 's' instead.
+  dates = np.array(pd.date_range(start=start_date, periods=timesteps, freq='%d%s%s' % (magnitude, type, 's' if type=='M' else '')))
+
+Best sample (None):
+
+Goodness of fit for Reach flow [UpperTweed] vs observed Q []:
+Mean error (bias): 8.191893
+Mean absolute error: 13.874724
+Root mean square error: 22.076121
+Nash-Sutcliffe coefficient: 0.720160
+Number of observations: 2192
+</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="16">
+<div class="cell-output cell-output-stdout">
+<pre><code>7328
+[1.01720032e+00 1.66773126e+00 2.85712620e+00 1.62864570e-01
+ 6.09751212e+00 1.72643659e+02 7.48862473e-01 3.45450895e-01]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Goodness of fit for Reach flow [UpperTweed] vs observed Q []:
+Mean error (bias): 4.525751
+Mean absolute error: 12.704338
+Root mean square error: 22.353111
+Nash-Sutcliffe coefficient: 0.738665
+Number of observations: 2557
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="tweed_calibration_files/figure-html/cell-18-output-2.png" width="1431" height="326"></p>
+</div>
+</div>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
