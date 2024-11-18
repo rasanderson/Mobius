@@ -3,6 +3,7 @@ import importlib.util
 import pickle
 from scipy.stats import norm
 import os
+import sys
 
 # Initialise wrapper
 # Note that the paths assume /home/nras/Mobius/ as the root directory
@@ -72,10 +73,15 @@ def log_likelihood(params, error_param_dict, comparisons, skip_timesteps=0):
 
 #dataset_fpath = os.path.join(current_dir, 'Applications', 'Persist', 'optimized_params.dat')
 
-dataset = wr.DataSet.setup_from_parameter_and_input_files('/home/nras/Mobius/PythonWrapper/PERSiST/optimized_params.dat', '/home/nras/Mobius/tweed_persist/BasinObs_upper_datainputs.dat')
-
+#dataset = wr.DataSet.setup_from_parameter_and_input_files('/home/nras/Mobius/PythonWrapper/PERSiST/optimized_params.dat', '/home/nras/Mobius/tweed_persist/BasinObs_upper_datainputs.dat')
+#dataset = wr.DataSet.setup_from_parameter_and_input_files(optimized_params, input_path)
 #dataset = wr.DataSet.setup_from_parameter_and_input_files('/home/nras/Mobius/PythonWrapper/PERSiST/optimized_params.dat', '/home/nras/Mobius/Applications/Persist/Tarland/persist_inputs_Tarland.dat')
 #dataset = wr.DataSet.setup_from_parameter_and_input_files('..\..\Applications\Persist\Haelva\optimized_params.dat', '..\..\Applications\Persist\Haelva\persist_inputs_Haelva.dat')
+
+def setup_dataset(optimized_params, input_path):
+    dataset = wr.DataSet.setup_from_parameter_and_input_files(optimized_params, input_path)
+    return dataset
+
 
 if __name__ == '__main__': # NOTE: this is necessary for parallelisation!
     
@@ -97,6 +103,9 @@ if __name__ == '__main__': # NOTE: this is necessary for parallelisation!
     result_path = settings_dict['result_path'] 
     chain_path = settings_dict['chain_path']
     corner_path = settings_dict['corner_path']
+    optimized_params = os.getenv('OPTIMIZED')
+    inputs_path = os.getenv('INPUTS_PATH')
+    dataset = setup_dataset(optimized_params, inputs_path)
 
     # Perform MCMC sampling (but keep everything at present i.e. no burning or thinning)
     result = cu.run_mcmc(log_likelihood, params, error_param_dict, comparisons, nworkers=nworkers,
