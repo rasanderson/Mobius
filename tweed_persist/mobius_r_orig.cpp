@@ -45,18 +45,13 @@ WarningPrint(t Value, v... Tail)
 
 #include "../mobius.h"
 
-#include "../Modules/INCA/Persist.h"
 #include "../Modules/PET.h"
-#include "../Modules/INCA/INCA-N.h"
-
-
-/*
 #include "../Modules/Simply/SimplySnow.h"
 #define SIMPLYQ_GROUNDWATER
 #include "../Modules/Simply/SimplyQ.h"
 #include "../Modules/Simply/SimplySed.h"
 #include "../Modules/Simply/SimplyP.h"
-*/
+
 
 mobius_model    *Model   = nullptr;;
 mobius_data_set *DataSet = nullptr;
@@ -71,14 +66,13 @@ void BuildModel()
 	
 	//The following has to be switched out if you want to use a different model.
 	
-	//Model = BeginModelDefinition("SimplyP", true);   //'true' signifies that we want an "End date" parameter instead of a "Timesteps" parameter
-	Model = BeginModelDefinition("PERSiST");   //'true' signifies that we want an "End date" parameter instead of a "Timesteps" parameter
-	AddPersistModel(Model);
-	//AddThornthwaitePETModule(Model);
-	//AddSimplySnowModule(Model);
-	//AddSimplyHydrologyModule(Model);
-	//AddSimplySedimentModule(Model);
-	//AddSimplyPModel(Model);
+	Model = BeginModelDefinition("SimplyP", true);   //'true' signifies that we want an "End date" parameter instead of a "Timesteps" parameter
+	
+	AddThornthwaitePETModule(Model);
+	AddSimplySnowModule(Model);
+	AddSimplyHydrologyModule(Model);
+	AddSimplySedimentModule(Model);
+	AddSimplyPModel(Model);
 }
 
 
@@ -116,7 +110,7 @@ mobius_setup_from_parameter_file_and_input_series(std::string ParameterFileName,
 	DataSet->InputDataHasSeparateStartDate = true;
 	
 	SetInputSeries(DataSet, "Air temperature", {}, AirTemperature.data(), AirTemperature.size());
-	SetInputSeries(DataSet, "Actual precipitation", {}, Precipitation.data(), Precipitation.size());
+	SetInputSeries(DataSet, "Precipitation", {}, Precipitation.data(), Precipitation.size());
 }
 
 

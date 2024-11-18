@@ -236,7 +236,7 @@ def get_date_index(dataset) :
 	
     (type, magnitude) = dataset.get_timestep_size()
 	
-    return pd.date_range(start=start_date, periods=timesteps, freq='%d%s%s' % (magnitude, type, 'S' if type=='M' else ''))
+    return pd.date_range(start=start_date, periods=timesteps, freq='%d%s%s' % (magnitude, type, 's' if type=='M' else ''))
 
 def get_input_date_index(dataset) :
     start_date = dataset.get_input_start_date()
@@ -244,7 +244,7 @@ def get_input_date_index(dataset) :
 	
     (type, magnitude) = dataset.get_timestep_size()
 	
-    return pd.date_range(start=start_date, periods=timesteps, freq='%d%s%s' % (magnitude, type, 'S' if type=='M' else ''))
+    return pd.date_range(start=start_date, periods=timesteps, freq='%d%s%s' % (magnitude, type, 's' if type=='M' else ''))
 
 
 def calculate_residuals(params, dataset, comparisons, norm=False, skip_timesteps=0):
@@ -583,7 +583,7 @@ def get_input_dataframe(dataset, list, alignwithresults=False) :
 	
     (type, magnitude) = dataset.get_timestep_size()
 	
-    dates = np.array(pd.date_range(start=start_date, periods=timesteps, freq='%d%s%s' % (magnitude, type, 'S' if type=='M' else '')))
+    dates = np.array(pd.date_range(start=start_date, periods=timesteps, freq='%d%s%s' % (magnitude, type, 's' if type=='M' else '')))
 	
     df = pd.DataFrame({'Date' : dates})
 	
