@@ -17,4 +17,8 @@ json/json.hpp
 .Rhistory
 optimized_params.dat
 *.Rproj
+mcmc_map_params.dat
+calibration.html
+PythonWrapper/PERSiST/calibration.ipynb
+PythonWrapper/PERSiST/calibration_files/*
 
