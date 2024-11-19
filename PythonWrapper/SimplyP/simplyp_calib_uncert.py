@@ -1,6 +1,7 @@
 import numpy as np
 import types
 import importlib
+import importlib.util
 import importlib.machinery
 #import imp
 import pickle
@@ -8,13 +9,25 @@ from scipy.stats import norm
 
 # Initialise wrapper
 wrapper_fpath = (r'../mobius.py')
-wr = imp.load_source('mobius', wrapper_fpath)
+#wr = imp.load_source('mobius', wrapper_fpath)
 #wr.initialize('../../Applications/SimplyP/simplyp.so')
-wr.initialize('../../Applications/SimplyP/simplyp.dll')
+#wr.initialize('../../Applications/SimplyP/simplyp.dll')
+# Load the module from the specified file path
+spec = importlib.util.spec_from_file_location('mobius', wrapper_fpath)
+mobius_module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mobius_module)
+
+# Initialize the module
+mobius_module.initialize('../../Applications/SimplyP/simplyp.so')
 
 # Calibration functions
 calib_fpath = (r'../mobius_calib_uncert_lmfit.py')
-cu = imp.load_source('mobius_calib_uncert_lmfit', calib_fpath)
+#cu = imp.load_source('mobius_calib_uncert_lmfit', calib_fpath)
+speccu = importlib.util.spec_from_file_location('mobius_calib_uncert_lmfit', calib_fpath)
+mobius_modulecu = importlib.util.module_from_spec(speccu)
+speccu.loader.exec_module(mobius_modulecu)
+
+
 
 def log_likelihood(params, error_param_dict, comparisons, skip_timesteps=0):
     """ Log-likelihood assuming heteroscedastic Gaussian errors.
