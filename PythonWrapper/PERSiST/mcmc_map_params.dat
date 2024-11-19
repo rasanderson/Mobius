@@ -1,9 +1,9 @@
-# Parameter file generated for model PERSiST, containing modules (PERSiST V1.4) at 2024-11-19 14:43:21
+# Parameter file generated for model PERSiST, containing modules (PERSiST V1.4) at 2024-11-19 15:33:54
 
 index_sets:
 "Landscape units" : {"All"}
 "Soils" : {"Quick" "Soilwater" "Groundwater"}
-"Reaches" : {"UpperTweed"}
+"Reaches" : {"LowerTweed"}
 
 parameters:
 
@@ -27,13 +27,13 @@ parameters:
 	# Hydrology by land class ("Landscape units") #
 
 	"Snow multiplier" :     #(dimensionless) [0.5, 1.5] Adjustment factor used to account for bias in the relationship between snow measured in the gauge and effective snowfall amounts falling
-	1.18433613184624
+	0.521924933660937
 
 	"Snow melt temperature" :     #(°C) [-4, 4] The temperature at or above which snow can melt
-	1.29188734708211
+	3.32670694641451
 
 	"Degree day melt factor" :     #(mm/°C/day) [1, 4] Describes the dependency of snow melt rates on temperature. The parameter represents the number of millimetres water melted per degree celcius above the snow melt temperature
-	3.30397587676781
+	2.60843473406966
 
 	"Rain multiplier" :     #(dimensionless) [0.5, 1.5] Adjustment factor used to account for bias in the relationship between rain measured in the gauge and effective rainfall amounts falling
 	1
@@ -42,7 +42,7 @@ parameters:
 	0
 
 	"Degree day evapotranspiration" :     #(mm/°C/day) [0.05, 0.2] Describes the baseline dependency of evapotranspiration on air temperature. The parameter represents the number of millimetres water evapotranspired per degree celcius above the growing degree threshold when evapotranspiration rates are not soil moisture limited
-	0.158426385744882
+	0.13241986037262
 
 	"Growing degree threshold" :     #(°C) [-4, 4] The temperature at or above which plant growth and hence evapotranspiration are assumed to occur
 	-1
@@ -80,8 +80,8 @@ parameters:
 
 	"Time constant" :     #(days) [1, 9999] The inverse of the rate at which water flows out of a box
 	1
-	4.49798947447427
-	84.7833145804942
+	6.12280682733429
+	190.502447096603
 
 	"Evapotranspiration adjustment" :     #(dimensionless) [0, 10] A factor to slow the rate of evapotranspiration when the depth of water in a box is below the retained water depth. Special  values include 0 (no slowing of evapotranspiration, 1 (slowing is proportional to the depth of water remaining in the bucket) and values above 10 (all evapotranspiration effectively stops when the depth of water is below the retained water depth)
 	0
@@ -108,7 +108,7 @@ parameters:
 	# Reach and subcatchment characteristics ("Reaches") #
 
 	"Terrestrial catchment area" :     #(km2) [0.01, 999999] The terrestrial area of a subcatchment, excluding open water
-	1800
+	7000
 
 	"Reach length" :     #(m) [1, 999999] The length of the main stem of the stream / reach in a subcatchment
 	160000
@@ -154,7 +154,7 @@ parameters:
 
 	"Percolation matrix" :     #(dimensionless) [0, 1] The fraction of runoff that goes from one box to another
 	0 1 0
-	1 0.684652564873288 0.34183861196405
+	1 0.690972629201409 0.438749297774315
 	1 0 1
 
 

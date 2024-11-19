@@ -1,6 +1,6 @@
 # PERSiST hydrological model
 
-This is based on the Tarland example calibration, for the Tweed. Splits the Tweed into an 'upper' and 'lower' catchment.
+This is based on the Tarland example calibration, for the Lower Tweed. Splits the Tweed into an 'upper' and 'lower' catchment.
 
 ```{python}
 #| echo: false
@@ -103,8 +103,8 @@ spec.loader.exec_module(mobius_calib_uncert_lmfit)
 #params_path = os.path.join(parent_dir, "Applications", "Persist", "Tarland", "persist_params_Tarland.dat")
 #inputs_path = os.path.join(parent_dir, "Applications", "Persist", "Tarland", "persist_inputs_Tarland.dat")
 two_dirs_up = os.path.abspath(os.path.join(current_dir, "../.."))
-params_path = os.path.join(two_dirs_up, "tweed_persist", "BasinObs_upper_testparameters.dat")
-inputs_path = os.path.join(two_dirs_up, "tweed_persist", "BasinObs_upper_datainputs.dat")
+params_path = os.path.join(two_dirs_up, "tweed_persist", "BasinObs_lower_testparameters.dat")
+inputs_path = os.path.join(two_dirs_up, "tweed_persist", "BasinObs_lower_datainputs.dat")
 
 #params_path = "/home/nras/Mobius/tweed_persist/BasinObs_upper_testparameters.dat"
 #inputs_path = "/home/nras/Mobius/tweed_persist/BasinObs_upper_datainputs.dat"
@@ -117,13 +117,13 @@ dataset = mobius.DataSet.setup_from_parameter_and_input_files(params_path, input
 ```{python}
 #| echo: false
 comparisons = [
-    ('Reach flow', ['UpperTweed'], 'observed Q', [])
+    ('Reach flow', ['LowerTweed'], 'observed Q', [])
 ]
 ```
 
 ```{python}
 #| echo: false
-index_short_name = {'All':'A', 'Quick':'q', 'Soilwater':'s', 'Groundwater':'g', 'UpperTweed':'r'}
+index_short_name = {'All':'A', 'Quick':'q', 'Soilwater':'s', 'Groundwater':'g', 'LowerTweed':'r'}
 
 #param_df = cu.get_double_parameters_as_dataframe(dataset, index_short_name=index_short_name)
 param_df = mobius_calib_uncert_lmfit.get_double_parameters_as_dataframe(dataset, index_short_name=index_short_name)
