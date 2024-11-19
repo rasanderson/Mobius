@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>tweed_calibration</title>
+<title>tweed_calibration_upper</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,18 +23,18 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="tweed_calibration_files/libs/clipboard/clipboard.min.js"></script>
-<script src="tweed_calibration_files/libs/quarto-html/quarto.js"></script>
-<script src="tweed_calibration_files/libs/quarto-html/popper.min.js"></script>
-<script src="tweed_calibration_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="tweed_calibration_files/libs/quarto-html/anchor.min.js"></script>
-<link href="tweed_calibration_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="tweed_calibration_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="tweed_calibration_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="tweed_calibration_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="tweed_calibration_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="tweed_calibration_upper_files/libs/clipboard/clipboard.min.js"></script>
+<script src="tweed_calibration_upper_files/libs/quarto-html/quarto.js"></script>
+<script src="tweed_calibration_upper_files/libs/quarto-html/popper.min.js"></script>
+<script src="tweed_calibration_upper_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="tweed_calibration_upper_files/libs/quarto-html/anchor.min.js"></script>
+<link href="tweed_calibration_upper_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="tweed_calibration_upper_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="tweed_calibration_upper_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="tweed_calibration_upper_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="tweed_calibration_upper_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
@@ -61,20 +61,22 @@ ul.task-list li input[type="checkbox"] {
   </div>
   
 
+
 </header>
 
+
 <p>This is based on the Tarland example calibration, for the Tweed. Splits the Tweed into an ‘upper’ and ‘lower’ catchment.</p>
-<div class="cell" data-execution_count="1">
+<div id="4e47ca6c" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-stdout">
 <pre><code>/home/nras/anaconda3/envs/mobius/bin/python</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="6">
+<div id="3d33018b" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display" data-execution_count="6">
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -674,7 +676,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
-<div class="cell" data-execution_count="7">
+<div id="37c723aa" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Goodness of fit for Reach flow [UpperTweed] vs observed Q []:
@@ -686,15 +688,19 @@ Number of observations: 2557
 </code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="tweed_calibration_files/figure-html/cell-8-output-2.png" width="1431" height="326"></p>
+<div>
+<figure class="figure">
+<p><img src="tweed_calibration_upper_files/figure-html/cell-8-output-2.png" width="1431" height="326" class="figure-img"></p>
+</figure>
 </div>
 </div>
-<div class="cell" data-execution_count="8">
+</div>
+<div id="ee2696e4" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-display" data-execution_count="8">
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -794,9 +800,9 @@ Number of observations: 2557
 </div>
 </div>
 </div>
-<div class="cell" data-execution_count="9">
+<div id="7e981d4f" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display" data-execution_count="9">
-<table class="jp-toc-ignore table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="jp-toc-ignore caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>Parameters</caption>
 <tbody>
 <tr class="odd">
@@ -884,7 +890,7 @@ Number of observations: 2557
 </table>
 </div>
 </div>
-<div class="cell" data-execution_count="10">
+<div id="0d3b31a4" class="cell" data-execution_count="10">
 <div class="cell-output cell-output-stdout">
 <pre><code>Optimization results
 
@@ -923,7 +929,7 @@ perc_A_s_g     0.333        0        1  0.00778    False 1.0-perc_A_s_s     None
 perc_A_s_s     0.667        0        1  0.00778     True     None     None</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="11">
+<div id="10fef47c" class="cell" data-execution_count="11">
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Goodness of fit for Reach flow [UpperTweed] vs observed Q []:
@@ -935,12 +941,16 @@ Number of observations: 2557
 </code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="tweed_calibration_files/figure-html/cell-12-output-2.png" width="1431" height="326"></p>
+<div>
+<figure class="figure">
+<p><img src="tweed_calibration_upper_files/figure-html/cell-12-output-2.png" width="1431" height="326" class="figure-img"></p>
+</figure>
 </div>
 </div>
-<div class="cell" data-execution_count="12">
+</div>
+<div id="38e4a552" class="cell" data-execution_count="12">
 <div class="cell-output cell-output-display" data-execution_count="12">
-<table class="jp-toc-ignore table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="jp-toc-ignore caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>Parameters</caption>
 <tbody>
 <tr class="odd">
@@ -1057,51 +1067,55 @@ Number of observations: 2557
 </table>
 </div>
 </div>
-<div class="cell" data-execution_count="14">
+<div id="d4c89e57" class="cell" data-execution_count="14">
 <div class="cell-output cell-output-stdout">
-<pre><code>  0%|                                                   | 0/150 [00:00&lt;?, ?it/s]  1%|▎                                          | 1/150 [00:00&lt;00:48,  3.09it/s]  1%|▌                                          | 2/150 [00:00&lt;00:47,  3.09it/s]  2%|▊                                          | 3/150 [00:00&lt;00:47,  3.11it/s]  3%|█▏                                         | 4/150 [00:01&lt;00:47,  3.07it/s]  3%|█▍                                         | 5/150 [00:01&lt;00:43,  3.33it/s]  4%|█▋                                         | 6/150 [00:01&lt;00:44,  3.24it/s]  5%|██                                         | 7/150 [00:02&lt;00:43,  3.30it/s]  5%|██▎                                        | 8/150 [00:02&lt;00:48,  2.91it/s]  6%|██▌                                        | 9/150 [00:02&lt;00:47,  2.96it/s]  7%|██▊                                       | 10/150 [00:03&lt;00:47,  2.95it/s]  7%|███                                       | 11/150 [00:03&lt;00:47,  2.91it/s]  8%|███▎                                      | 12/150 [00:03&lt;00:46,  2.96it/s]  9%|███▋                                      | 13/150 [00:04&lt;00:44,  3.07it/s]  9%|███▉                                      | 14/150 [00:04&lt;00:48,  2.82it/s] 10%|████▏                                     | 15/150 [00:05&lt;00:47,  2.82it/s] 11%|████▍                                     | 16/150 [00:05&lt;00:48,  2.74it/s] 11%|████▊                                     | 17/150 [00:05&lt;00:46,  2.89it/s] 12%|█████                                     | 18/150 [00:06&lt;00:47,  2.80it/s] 13%|█████▎                                    | 19/150 [00:06&lt;00:45,  2.90it/s] 13%|█████▌                                    | 20/150 [00:06&lt;00:46,  2.77it/s] 14%|█████▉                                    | 21/150 [00:07&lt;00:48,  2.65it/s] 15%|██████▏                                   | 22/150 [00:07&lt;00:48,  2.63it/s] 15%|██████▍                                   | 23/150 [00:07&lt;00:47,  2.66it/s] 16%|██████▋                                   | 24/150 [00:08&lt;00:47,  2.66it/s] 17%|███████                                   | 25/150 [00:08&lt;00:48,  2.56it/s] 17%|███████▎                                  | 26/150 [00:09&lt;00:48,  2.55it/s] 18%|███████▌                                  | 27/150 [00:09&lt;00:50,  2.45it/s] 19%|███████▊                                  | 28/150 [00:09&lt;00:47,  2.57it/s] 19%|████████                                  | 29/150 [00:10&lt;00:48,  2.51it/s] 20%|████████▍                                 | 30/150 [00:10&lt;00:45,  2.61it/s] 21%|████████▋                                 | 31/150 [00:11&lt;00:46,  2.53it/s] 21%|████████▉                                 | 32/150 [00:11&lt;00:49,  2.39it/s] 22%|█████████▏                                | 33/150 [00:12&lt;00:48,  2.40it/s] 23%|█████████▌                                | 34/150 [00:12&lt;00:49,  2.33it/s] 23%|█████████▊                                | 35/150 [00:12&lt;00:49,  2.31it/s] 24%|██████████                                | 36/150 [00:13&lt;00:49,  2.28it/s] 25%|██████████▎                               | 37/150 [00:13&lt;00:49,  2.27it/s] 25%|██████████▋                               | 38/150 [00:14&lt;00:50,  2.24it/s] 26%|██████████▉                               | 39/150 [00:14&lt;00:49,  2.26it/s] 27%|███████████▏                              | 40/150 [00:15&lt;00:48,  2.25it/s] 27%|███████████▍                              | 41/150 [00:15&lt;00:49,  2.21it/s] 28%|███████████▊                              | 42/150 [00:16&lt;00:48,  2.21it/s] 29%|████████████                              | 43/150 [00:16&lt;00:49,  2.15it/s] 29%|████████████▎                             | 44/150 [00:17&lt;00:49,  2.15it/s] 30%|████████████▌                             | 45/150 [00:17&lt;00:48,  2.15it/s] 31%|████████████▉                             | 46/150 [00:18&lt;00:49,  2.12it/s] 31%|█████████████▏                            | 47/150 [00:18&lt;00:48,  2.11it/s] 32%|█████████████▍                            | 48/150 [00:18&lt;00:47,  2.13it/s] 33%|█████████████▋                            | 49/150 [00:19&lt;00:47,  2.11it/s] 33%|██████████████                            | 50/150 [00:19&lt;00:46,  2.14it/s] 34%|██████████████▎                           | 51/150 [00:20&lt;00:46,  2.12it/s] 35%|██████████████▌                           | 52/150 [00:20&lt;00:46,  2.12it/s] 35%|██████████████▊                           | 53/150 [00:21&lt;00:47,  2.05it/s] 36%|███████████████                           | 54/150 [00:21&lt;00:47,  2.01it/s] 37%|███████████████▍                          | 55/150 [00:22&lt;00:46,  2.04it/s] 37%|███████████████▋                          | 56/150 [00:22&lt;00:46,  2.04it/s] 38%|███████████████▉                          | 57/150 [00:23&lt;00:45,  2.04it/s] 39%|████████████████▏                         | 58/150 [00:23&lt;00:45,  2.04it/s] 39%|████████████████▌                         | 59/150 [00:24&lt;00:44,  2.04it/s] 40%|████████████████▊                         | 60/150 [00:24&lt;00:44,  2.03it/s] 41%|█████████████████                         | 61/150 [00:25&lt;00:43,  2.03it/s] 41%|█████████████████▎                        | 62/150 [00:25&lt;00:44,  1.98it/s] 42%|█████████████████▋                        | 63/150 [00:26&lt;00:44,  1.97it/s] 43%|█████████████████▉                        | 64/150 [00:26&lt;00:42,  2.00it/s] 43%|██████████████████▏                       | 65/150 [00:27&lt;00:41,  2.05it/s] 44%|██████████████████▍                       | 66/150 [00:27&lt;00:41,  2.02it/s] 45%|██████████████████▊                       | 67/150 [00:28&lt;00:40,  2.03it/s] 45%|███████████████████                       | 68/150 [00:28&lt;00:40,  2.02it/s] 46%|███████████████████▎                      | 69/150 [00:29&lt;00:39,  2.04it/s] 47%|███████████████████▌                      | 70/150 [00:29&lt;00:39,  2.00it/s] 47%|███████████████████▉                      | 71/150 [00:30&lt;00:40,  1.97it/s] 48%|████████████████████▏                     | 72/150 [00:31&lt;00:44,  1.76it/s] 49%|████████████████████▍                     | 73/150 [00:31&lt;00:42,  1.80it/s] 49%|████████████████████▋                     | 74/150 [00:32&lt;00:41,  1.82it/s] 50%|█████████████████████                     | 75/150 [00:32&lt;00:41,  1.80it/s] 51%|█████████████████████▎                    | 76/150 [00:33&lt;00:41,  1.77it/s] 51%|█████████████████████▌                    | 77/150 [00:33&lt;00:40,  1.79it/s] 52%|█████████████████████▊                    | 78/150 [00:34&lt;00:43,  1.65it/s] 53%|██████████████████████                    | 79/150 [00:35&lt;00:41,  1.70it/s] 53%|██████████████████████▍                   | 80/150 [00:35&lt;00:40,  1.75it/s] 54%|██████████████████████▋                   | 81/150 [00:36&lt;00:38,  1.79it/s] 55%|██████████████████████▉                   | 82/150 [00:36&lt;00:37,  1.80it/s] 55%|███████████████████████▏                  | 83/150 [00:37&lt;00:36,  1.83it/s] 56%|███████████████████████▌                  | 84/150 [00:37&lt;00:36,  1.82it/s] 57%|███████████████████████▊                  | 85/150 [00:38&lt;00:34,  1.88it/s] 57%|████████████████████████                  | 86/150 [00:38&lt;00:34,  1.87it/s] 58%|████████████████████████▎                 | 87/150 [00:39&lt;00:33,  1.87it/s] 59%|████████████████████████▋                 | 88/150 [00:39&lt;00:33,  1.86it/s] 59%|████████████████████████▉                 | 89/150 [00:40&lt;00:32,  1.86it/s] 60%|█████████████████████████▏                | 90/150 [00:40&lt;00:32,  1.85it/s] 61%|█████████████████████████▍                | 91/150 [00:41&lt;00:31,  1.86it/s] 61%|█████████████████████████▊                | 92/150 [00:42&lt;00:31,  1.85it/s] 62%|██████████████████████████                | 93/150 [00:42&lt;00:30,  1.86it/s] 63%|██████████████████████████▎               | 94/150 [00:43&lt;00:29,  1.88it/s] 63%|██████████████████████████▌               | 95/150 [00:43&lt;00:29,  1.89it/s] 64%|██████████████████████████▉               | 96/150 [00:44&lt;00:28,  1.87it/s] 65%|███████████████████████████▏              | 97/150 [00:44&lt;00:28,  1.88it/s] 65%|███████████████████████████▍              | 98/150 [00:45&lt;00:27,  1.88it/s] 66%|███████████████████████████▋              | 99/150 [00:45&lt;00:26,  1.90it/s] 67%|███████████████████████████▎             | 100/150 [00:46&lt;00:26,  1.87it/s] 67%|███████████████████████████▌             | 101/150 [00:46&lt;00:26,  1.87it/s] 68%|███████████████████████████▉             | 102/150 [00:47&lt;00:25,  1.85it/s] 69%|████████████████████████████▏            | 103/150 [00:47&lt;00:26,  1.80it/s] 69%|████████████████████████████▍            | 104/150 [00:48&lt;00:25,  1.82it/s] 70%|████████████████████████████▋            | 105/150 [00:49&lt;00:24,  1.82it/s] 71%|████████████████████████████▉            | 106/150 [00:49&lt;00:24,  1.82it/s] 71%|█████████████████████████████▏           | 107/150 [00:50&lt;00:23,  1.85it/s] 72%|█████████████████████████████▌           | 108/150 [00:50&lt;00:22,  1.87it/s] 73%|█████████████████████████████▊           | 109/150 [00:51&lt;00:22,  1.85it/s] 73%|██████████████████████████████           | 110/150 [00:51&lt;00:21,  1.85it/s] 74%|██████████████████████████████▎          | 111/150 [00:52&lt;00:21,  1.84it/s] 75%|██████████████████████████████▌          | 112/150 [00:52&lt;00:20,  1.85it/s] 75%|██████████████████████████████▉          | 113/150 [00:53&lt;00:19,  1.87it/s] 76%|███████████████████████████████▏         | 114/150 [00:53&lt;00:19,  1.89it/s] 77%|███████████████████████████████▍         | 115/150 [00:54&lt;00:18,  1.87it/s] 77%|███████████████████████████████▋         | 116/150 [00:54&lt;00:18,  1.86it/s] 78%|███████████████████████████████▉         | 117/150 [00:55&lt;00:17,  1.87it/s] 79%|████████████████████████████████▎        | 118/150 [00:55&lt;00:17,  1.87it/s] 79%|████████████████████████████████▌        | 119/150 [00:56&lt;00:16,  1.86it/s] 80%|████████████████████████████████▊        | 120/150 [00:57&lt;00:16,  1.86it/s] 81%|█████████████████████████████████        | 121/150 [00:57&lt;00:15,  1.87it/s] 81%|█████████████████████████████████▎       | 122/150 [00:58&lt;00:14,  1.89it/s] 82%|█████████████████████████████████▌       | 123/150 [00:58&lt;00:14,  1.87it/s] 83%|█████████████████████████████████▉       | 124/150 [00:59&lt;00:13,  1.87it/s] 83%|██████████████████████████████████▏      | 125/150 [00:59&lt;00:13,  1.86it/s] 84%|██████████████████████████████████▍      | 126/150 [01:00&lt;00:12,  1.85it/s] 85%|██████████████████████████████████▋      | 127/150 [01:00&lt;00:12,  1.85it/s] 85%|██████████████████████████████████▉      | 128/150 [01:01&lt;00:11,  1.85it/s] 86%|███████████████████████████████████▎     | 129/150 [01:01&lt;00:11,  1.81it/s] 87%|███████████████████████████████████▌     | 130/150 [01:02&lt;00:11,  1.79it/s] 87%|███████████████████████████████████▊     | 131/150 [01:03&lt;00:11,  1.71it/s] 88%|████████████████████████████████████     | 132/150 [01:03&lt;00:10,  1.70it/s] 89%|████████████████████████████████████▎    | 133/150 [01:04&lt;00:09,  1.74it/s] 89%|████████████████████████████████████▋    | 134/150 [01:04&lt;00:08,  1.79it/s] 90%|████████████████████████████████████▉    | 135/150 [01:05&lt;00:08,  1.84it/s] 91%|█████████████████████████████████████▏   | 136/150 [01:05&lt;00:07,  1.86it/s] 91%|█████████████████████████████████████▍   | 137/150 [01:06&lt;00:06,  1.86it/s] 92%|█████████████████████████████████████▋   | 138/150 [01:06&lt;00:06,  1.88it/s] 93%|█████████████████████████████████████▉   | 139/150 [01:07&lt;00:05,  1.90it/s] 93%|██████████████████████████████████████▎  | 140/150 [01:07&lt;00:05,  1.89it/s] 94%|██████████████████████████████████████▌  | 141/150 [01:08&lt;00:04,  1.90it/s] 95%|██████████████████████████████████████▊  | 142/150 [01:09&lt;00:04,  1.87it/s] 95%|███████████████████████████████████████  | 143/150 [01:09&lt;00:03,  1.87it/s] 96%|███████████████████████████████████████▎ | 144/150 [01:10&lt;00:03,  1.88it/s] 97%|███████████████████████████████████████▋ | 145/150 [01:10&lt;00:02,  1.89it/s] 97%|███████████████████████████████████████▉ | 146/150 [01:11&lt;00:02,  1.89it/s] 98%|████████████████████████████████████████▏| 147/150 [01:11&lt;00:01,  1.88it/s] 99%|████████████████████████████████████████▍| 148/150 [01:12&lt;00:01,  1.88it/s] 99%|████████████████████████████████████████▋| 149/150 [01:12&lt;00:00,  1.87it/s]100%|█████████████████████████████████████████| 150/150 [01:13&lt;00:00,  1.88it/s]100%|█████████████████████████████████████████| 150/150 [01:13&lt;00:00,  2.05it/s]
+<pre><code>  0%|                                                   | 0/150 [00:00&lt;?, ?it/s]  1%|▎                                          | 1/150 [00:00&lt;00:54,  2.72it/s]  1%|▌                                          | 2/150 [00:00&lt;00:56,  2.62it/s]  2%|▊                                          | 3/150 [00:01&lt;00:57,  2.54it/s]  3%|█▏                                         | 4/150 [00:01&lt;00:56,  2.57it/s]  3%|█▍                                         | 5/150 [00:01&lt;00:55,  2.63it/s]  4%|█▋                                         | 6/150 [00:02&lt;00:54,  2.63it/s]  5%|██                                         | 7/150 [00:02&lt;00:55,  2.59it/s]  5%|██▎                                        | 8/150 [00:03&lt;00:56,  2.49it/s]  6%|██▌                                        | 9/150 [00:03&lt;00:54,  2.59it/s]  7%|██▊                                       | 10/150 [00:03&lt;00:57,  2.45it/s]  7%|███                                       | 11/150 [00:04&lt;00:53,  2.60it/s]  8%|███▎                                      | 12/150 [00:04&lt;00:55,  2.47it/s]  9%|███▋                                      | 13/150 [00:05&lt;01:01,  2.24it/s]  9%|███▉                                      | 14/150 [00:05&lt;01:01,  2.22it/s] 10%|████▏                                     | 15/150 [00:06&lt;01:02,  2.17it/s] 11%|████▍                                     | 16/150 [00:06&lt;01:04,  2.08it/s] 11%|████▊                                     | 17/150 [00:07&lt;01:04,  2.06it/s] 12%|█████                                     | 18/150 [00:07&lt;01:03,  2.09it/s] 13%|█████▎                                    | 19/150 [00:08&lt;01:05,  1.99it/s] 13%|█████▌                                    | 20/150 [00:08&lt;01:03,  2.05it/s] 14%|█████▉                                    | 21/150 [00:09&lt;01:03,  2.03it/s] 15%|██████▏                                   | 22/150 [00:09&lt;01:04,  1.98it/s] 15%|██████▍                                   | 23/150 [00:10&lt;01:02,  2.04it/s] 16%|██████▋                                   | 24/150 [00:10&lt;01:03,  2.00it/s] 17%|███████                                   | 25/150 [00:11&lt;01:02,  1.99it/s] 17%|███████▎                                  | 26/150 [00:11&lt;01:04,  1.93it/s] 18%|███████▌                                  | 27/150 [00:12&lt;01:05,  1.89it/s] 19%|███████▊                                  | 28/150 [00:12&lt;01:01,  1.99it/s] 19%|████████                                  | 29/150 [00:13&lt;01:03,  1.92it/s] 20%|████████▍                                 | 30/150 [00:13&lt;01:02,  1.92it/s] 21%|████████▋                                 | 31/150 [00:14&lt;01:01,  1.93it/s] 21%|████████▉                                 | 32/150 [00:14&lt;01:03,  1.86it/s] 22%|█████████▏                                | 33/150 [00:15&lt;01:02,  1.88it/s] 23%|█████████▌                                | 34/150 [00:16&lt;01:02,  1.85it/s] 23%|█████████▊                                | 35/150 [00:16&lt;01:01,  1.87it/s] 24%|██████████                                | 36/150 [00:17&lt;01:00,  1.88it/s] 25%|██████████▎                               | 37/150 [00:17&lt;01:01,  1.85it/s] 25%|██████████▋                               | 38/150 [00:18&lt;01:02,  1.79it/s] 26%|██████████▉                               | 39/150 [00:18&lt;01:01,  1.80it/s] 27%|███████████▏                              | 40/150 [00:19&lt;01:01,  1.79it/s] 27%|███████████▍                              | 41/150 [00:19&lt;01:00,  1.79it/s] 28%|███████████▊                              | 42/150 [00:20&lt;01:00,  1.78it/s] 29%|████████████                              | 43/150 [00:21&lt;01:00,  1.76it/s] 29%|████████████▎                             | 44/150 [00:21&lt;01:01,  1.72it/s] 30%|████████████▌                             | 45/150 [00:22&lt;01:00,  1.75it/s] 31%|████████████▉                             | 46/150 [00:22&lt;00:58,  1.78it/s] 31%|█████████████▏                            | 47/150 [00:23&lt;00:58,  1.75it/s] 32%|█████████████▍                            | 48/150 [00:23&lt;00:57,  1.77it/s] 33%|█████████████▋                            | 49/150 [00:24&lt;00:57,  1.77it/s] 33%|██████████████                            | 50/150 [00:25&lt;00:58,  1.72it/s] 34%|██████████████▎                           | 51/150 [00:25&lt;00:57,  1.73it/s] 35%|██████████████▌                           | 52/150 [00:26&lt;00:55,  1.77it/s] 35%|██████████████▊                           | 53/150 [00:26&lt;00:54,  1.78it/s] 36%|███████████████                           | 54/150 [00:27&lt;00:54,  1.77it/s] 37%|███████████████▍                          | 55/150 [00:27&lt;00:54,  1.74it/s] 37%|███████████████▋                          | 56/150 [00:28&lt;00:52,  1.78it/s] 38%|███████████████▉                          | 57/150 [00:29&lt;00:52,  1.78it/s] 39%|████████████████▏                         | 58/150 [00:29&lt;00:52,  1.75it/s] 39%|████████████████▌                         | 59/150 [00:30&lt;00:52,  1.74it/s] 40%|████████████████▊                         | 60/150 [00:30&lt;00:53,  1.68it/s] 41%|█████████████████                         | 61/150 [00:31&lt;00:53,  1.67it/s] 41%|█████████████████▎                        | 62/150 [00:32&lt;00:53,  1.64it/s] 42%|█████████████████▋                        | 63/150 [00:32&lt;00:53,  1.62it/s] 43%|█████████████████▉                        | 64/150 [00:33&lt;00:53,  1.62it/s] 43%|██████████████████▏                       | 65/150 [00:33&lt;00:53,  1.60it/s] 44%|██████████████████▍                       | 66/150 [00:34&lt;00:53,  1.58it/s] 45%|██████████████████▊                       | 67/150 [00:35&lt;00:52,  1.59it/s] 45%|███████████████████                       | 68/150 [00:35&lt;00:51,  1.59it/s] 46%|███████████████████▎                      | 69/150 [00:36&lt;00:51,  1.58it/s] 47%|███████████████████▌                      | 70/150 [00:37&lt;00:51,  1.56it/s] 47%|███████████████████▉                      | 71/150 [00:37&lt;00:50,  1.56it/s] 48%|████████████████████▏                     | 72/150 [00:38&lt;00:50,  1.56it/s] 49%|████████████████████▍                     | 73/150 [00:39&lt;00:49,  1.57it/s] 49%|████████████████████▋                     | 74/150 [00:39&lt;00:49,  1.53it/s] 50%|█████████████████████                     | 75/150 [00:40&lt;00:49,  1.52it/s] 51%|█████████████████████▎                    | 76/150 [00:41&lt;00:48,  1.52it/s] 51%|█████████████████████▌                    | 77/150 [00:41&lt;00:48,  1.52it/s] 52%|█████████████████████▊                    | 78/150 [00:42&lt;00:47,  1.52it/s] 53%|██████████████████████                    | 79/150 [00:43&lt;00:47,  1.51it/s] 53%|██████████████████████▍                   | 80/150 [00:43&lt;00:45,  1.53it/s] 54%|██████████████████████▋                   | 81/150 [00:44&lt;00:44,  1.54it/s] 55%|██████████████████████▉                   | 82/150 [00:44&lt;00:43,  1.56it/s] 55%|███████████████████████▏                  | 83/150 [00:45&lt;00:43,  1.55it/s] 56%|███████████████████████▌                  | 84/150 [00:46&lt;00:42,  1.54it/s] 57%|███████████████████████▊                  | 85/150 [00:46&lt;00:42,  1.55it/s] 57%|████████████████████████                  | 86/150 [00:47&lt;00:41,  1.55it/s] 58%|████████████████████████▎                 | 87/150 [00:48&lt;00:40,  1.56it/s] 59%|████████████████████████▋                 | 88/150 [00:48&lt;00:39,  1.56it/s] 59%|████████████████████████▉                 | 89/150 [00:49&lt;00:39,  1.55it/s] 60%|█████████████████████████▏                | 90/150 [00:50&lt;00:38,  1.54it/s] 61%|█████████████████████████▍                | 91/150 [00:50&lt;00:38,  1.53it/s] 61%|█████████████████████████▊                | 92/150 [00:51&lt;00:38,  1.52it/s] 62%|██████████████████████████                | 93/150 [00:52&lt;00:37,  1.54it/s] 63%|██████████████████████████▎               | 94/150 [00:52&lt;00:36,  1.53it/s] 63%|██████████████████████████▌               | 95/150 [00:53&lt;00:35,  1.54it/s] 64%|██████████████████████████▉               | 96/150 [00:54&lt;00:35,  1.54it/s] 65%|███████████████████████████▏              | 97/150 [00:54&lt;00:34,  1.54it/s] 65%|███████████████████████████▍              | 98/150 [00:55&lt;00:33,  1.55it/s] 66%|███████████████████████████▋              | 99/150 [00:56&lt;00:33,  1.54it/s] 67%|███████████████████████████▎             | 100/150 [00:56&lt;00:32,  1.53it/s] 67%|███████████████████████████▌             | 101/150 [00:57&lt;00:32,  1.53it/s] 68%|███████████████████████████▉             | 102/150 [00:57&lt;00:31,  1.54it/s] 69%|████████████████████████████▏            | 103/150 [00:58&lt;00:30,  1.56it/s] 69%|████████████████████████████▍            | 104/150 [00:59&lt;00:29,  1.55it/s] 70%|████████████████████████████▋            | 105/150 [00:59&lt;00:28,  1.56it/s] 71%|████████████████████████████▉            | 106/150 [01:00&lt;00:28,  1.57it/s] 71%|█████████████████████████████▏           | 107/150 [01:01&lt;00:26,  1.60it/s] 72%|█████████████████████████████▌           | 108/150 [01:01&lt;00:26,  1.61it/s] 73%|█████████████████████████████▊           | 109/150 [01:02&lt;00:25,  1.62it/s] 73%|██████████████████████████████           | 110/150 [01:02&lt;00:24,  1.63it/s] 74%|██████████████████████████████▎          | 111/150 [01:03&lt;00:24,  1.62it/s] 75%|██████████████████████████████▌          | 112/150 [01:04&lt;00:23,  1.62it/s] 75%|██████████████████████████████▉          | 113/150 [01:04&lt;00:22,  1.62it/s] 76%|███████████████████████████████▏         | 114/150 [01:05&lt;00:21,  1.64it/s] 77%|███████████████████████████████▍         | 115/150 [01:06&lt;00:21,  1.64it/s] 77%|███████████████████████████████▋         | 116/150 [01:06&lt;00:20,  1.64it/s] 78%|███████████████████████████████▉         | 117/150 [01:07&lt;00:19,  1.65it/s] 79%|████████████████████████████████▎        | 118/150 [01:07&lt;00:19,  1.67it/s] 79%|████████████████████████████████▌        | 119/150 [01:08&lt;00:18,  1.67it/s] 80%|████████████████████████████████▊        | 120/150 [01:09&lt;00:18,  1.66it/s] 81%|█████████████████████████████████        | 121/150 [01:09&lt;00:17,  1.64it/s] 81%|█████████████████████████████████▎       | 122/150 [01:10&lt;00:16,  1.65it/s] 82%|█████████████████████████████████▌       | 123/150 [01:10&lt;00:16,  1.67it/s] 83%|█████████████████████████████████▉       | 124/150 [01:11&lt;00:15,  1.67it/s] 83%|██████████████████████████████████▏      | 125/150 [01:12&lt;00:15,  1.66it/s] 84%|██████████████████████████████████▍      | 126/150 [01:12&lt;00:14,  1.66it/s] 85%|██████████████████████████████████▋      | 127/150 [01:13&lt;00:14,  1.64it/s] 85%|██████████████████████████████████▉      | 128/150 [01:13&lt;00:13,  1.64it/s] 86%|███████████████████████████████████▎     | 129/150 [01:14&lt;00:12,  1.63it/s] 87%|███████████████████████████████████▌     | 130/150 [01:15&lt;00:12,  1.65it/s] 87%|███████████████████████████████████▊     | 131/150 [01:15&lt;00:11,  1.65it/s] 88%|████████████████████████████████████     | 132/150 [01:16&lt;00:10,  1.65it/s] 89%|████████████████████████████████████▎    | 133/150 [01:16&lt;00:10,  1.67it/s] 89%|████████████████████████████████████▋    | 134/150 [01:17&lt;00:09,  1.67it/s] 90%|████████████████████████████████████▉    | 135/150 [01:18&lt;00:08,  1.70it/s] 91%|█████████████████████████████████████▏   | 136/150 [01:18&lt;00:08,  1.71it/s] 91%|█████████████████████████████████████▍   | 137/150 [01:19&lt;00:07,  1.70it/s] 92%|█████████████████████████████████████▋   | 138/150 [01:19&lt;00:07,  1.69it/s] 93%|█████████████████████████████████████▉   | 139/150 [01:20&lt;00:06,  1.70it/s] 93%|██████████████████████████████████████▎  | 140/150 [01:20&lt;00:05,  1.71it/s] 94%|██████████████████████████████████████▌  | 141/150 [01:21&lt;00:05,  1.70it/s] 95%|██████████████████████████████████████▊  | 142/150 [01:22&lt;00:04,  1.69it/s] 95%|███████████████████████████████████████  | 143/150 [01:22&lt;00:04,  1.69it/s] 96%|███████████████████████████████████████▎ | 144/150 [01:23&lt;00:03,  1.72it/s] 97%|███████████████████████████████████████▋ | 145/150 [01:23&lt;00:02,  1.71it/s] 97%|███████████████████████████████████████▉ | 146/150 [01:24&lt;00:02,  1.70it/s] 98%|████████████████████████████████████████▏| 147/150 [01:25&lt;00:01,  1.71it/s] 99%|████████████████████████████████████████▍| 148/150 [01:25&lt;00:01,  1.73it/s] 99%|████████████████████████████████████████▋| 149/150 [01:26&lt;00:00,  1.72it/s]100%|█████████████████████████████████████████| 150/150 [01:26&lt;00:00,  1.74it/s]100%|█████████████████████████████████████████| 150/150 [01:26&lt;00:00,  1.73it/s]
 The chain is shorter than 50 times the integrated autocorrelation time for 8 parameter(s). Use this estimate with caution and run a longer chain!
 N/50 = 3;
-tau: [14.85826385 17.18394766 13.88267783 16.3343847  15.05842147 16.95789699
- 16.05716905 18.75710797]
-Time elapsed running emcee: 1.23 minutes.
+tau: [14.78534295 17.7346946  17.81983712 17.39037529 16.56675428 14.07808319
+ 16.4627465  18.65613119]
+Time elapsed running emcee: 1.45 minutes.
 
-/home/nras/Mobius/PythonWrapper/mobius_calib_uncert_lmfit.py:239: FutureWarning: 'S' is deprecated and will be removed in a future version, please use 's' instead.
+/lvm/nras/Mobius/PythonWrapper/mobius_calib_uncert_lmfit.py:239: FutureWarning: 'S' is deprecated and will be removed in a future version, please use 's' instead.
   return pd.date_range(start=start_date, periods=timesteps, freq='%d%s%s' % (magnitude, type, 's' if type=='M' else ''))
-/home/nras/Mobius/PythonWrapper/mobius_calib_uncert_lmfit.py:586: FutureWarning: 'S' is deprecated and will be removed in a future version, please use 's' instead.
+/lvm/nras/Mobius/PythonWrapper/mobius_calib_uncert_lmfit.py:586: FutureWarning: 'S' is deprecated and will be removed in a future version, please use 's' instead.
   dates = np.array(pd.date_range(start=start_date, periods=timesteps, freq='%d%s%s' % (magnitude, type, 's' if type=='M' else '')))
 
 Best sample (None):
 
 Goodness of fit for Reach flow [UpperTweed] vs observed Q []:
-Mean error (bias): 8.191893
-Mean absolute error: 13.874724
-Root mean square error: 22.076121
-Nash-Sutcliffe coefficient: 0.720160
+Mean error (bias): 9.323504
+Mean absolute error: 14.135383
+Root mean square error: 22.209957
+Nash-Sutcliffe coefficient: 0.716757
 Number of observations: 2192
 </code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="16">
+<div id="761aa9b1" class="cell" data-execution_count="16">
 <div class="cell-output cell-output-stdout">
-<pre><code>7328
-[1.01720032e+00 1.66773126e+00 2.85712620e+00 1.62864570e-01
- 6.09751212e+00 1.72643659e+02 7.48862473e-01 3.45450895e-01]</code></pre>
+<pre><code>7014
+[ 1.18433613  1.29188735  3.30397588  0.15842639  4.49798947 84.78331458
+  0.68465256  0.34183861]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="17">
+<div id="cdda201f" class="cell" data-execution_count="17">
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Goodness of fit for Reach flow [UpperTweed] vs observed Q []:
-Mean error (bias): 4.525751
-Mean absolute error: 12.704338
-Root mean square error: 22.353111
-Nash-Sutcliffe coefficient: 0.738665
+Mean error (bias): 6.283648
+Mean absolute error: 12.862650
+Root mean square error: 21.647027
+Nash-Sutcliffe coefficient: 0.754914
 Number of observations: 2557
 </code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="tweed_calibration_files/figure-html/cell-18-output-2.png" width="1431" height="326"></p>
+<div>
+<figure class="figure">
+<p><img src="tweed_calibration_upper_files/figure-html/cell-18-output-2.png" width="1431" height="326" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 
@@ -1142,18 +1156,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1185,11 +1188,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1199,8 +1241,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1212,7 +1263,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1256,6 +1430,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1281,6 +1456,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1341,6 +1542,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 
