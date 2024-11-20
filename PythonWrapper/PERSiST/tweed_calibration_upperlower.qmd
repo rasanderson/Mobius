@@ -117,13 +117,14 @@ dataset = mobius.DataSet.setup_from_parameter_and_input_files(params_path, input
 ```{python}
 #| echo: false
 comparisons = [
-    ('Reach flow', ['UpperTweed'], 'observed Q', [])
+    ('Reach flow', ['UpperTweed'], 'observed Q', ['UpperTweed']),
+    ('Reach flow', ['LowerTweed'], 'observed Q', ['LowerTweed'])
 ]
 ```
 
 ```{python}
 #| echo: false
-index_short_name = {'All':'A', 'Quick':'q', 'Soilwater':'s', 'Groundwater':'g', 'UpperTweed':'r'}
+index_short_name = {'All':'A', 'Quick':'q', 'Soilwater':'s', 'Groundwater':'g', 'UpperTweed':'ru', 'LowerTweed':'rl'}
 
 #param_df = cu.get_double_parameters_as_dataframe(dataset, index_short_name=index_short_name)
 param_df = mobius_calib_uncert_lmfit.get_double_parameters_as_dataframe(dataset, index_short_name=index_short_name)
