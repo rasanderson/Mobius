@@ -1,0 +1,298 @@
+# PERSiST hydrological model
+
+This is based on the Tarland example calibration, for the Tweed. Splits the Tweed into an 'upper' and 'lower' catchment. This version merges uses a linked model of Upper Tweed flowing into Lower.
+
+```{python}
+#| echo: false
+import sys
+import subprocess
+
+print(sys.executable)
+# Uncomment next line to show installed packages
+# subprocess.run(["pip", "list"])
+
+```
+
+```{python}
+#| echo: false
+import matplotlib.pyplot as plt
+# Uncomment next line for interactive plots
+# %matplotlib ipympl
+# Next line not needed for Quarto as just for Jupyter
+# plt.switch_backend('module://matplotlib_inline.backend_inline')
+import warnings
+#import imp
+import pickle
+import lmfit
+import os
+import pandas as pd
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+import datetime as dt
+
+# imp has been deprecated in Python 3.4+ in favour of importlib
+import importlib
+
+# networkx is needed in calibration routine. Put it explicitly here
+import networkx
+
+# numdifftools seems to be needed for some calibration functions
+import numdifftools
+
+# runpy needed to execute Python files in Quarto
+import runpy
+
+# Styling
+warnings.filterwarnings("ignore")
+plt.style.use('ggplot')
+```
+
+```{python}
+#| echo: false
+# Initialise wrapper and test datasets (original imp code)
+# wrapper_fpath = (r"..\mobius.py")
+# wr = imp.load_source('mobius', wrapper_fpath)
+# wr.initialize('..\..\Applications\Persist\persist.dll')
+
+
+# Get the current working directory
+current_dir = os.getcwd()
+
+# Get the parent directory
+parent_dir = os.path.dirname(current_dir)
+
+# Construct the full path to the mobius.py file
+wrapper_fpath = os.path.join(parent_dir, "mobius.py")
+
+# Load the module
+spec = importlib.util.spec_from_file_location("mobius", wrapper_fpath)
+mobius = importlib.util.module_from_spec(spec)
+sys.modules["mobius"] = mobius
+spec.loader.exec_module(mobius)
+# Initialize with the correct path
+# Ideally set dynamically based on the current working directory but error
+#dll_path = os.path.join("..", parent_dir, "Applications", "Persist", "persist.dll")
+dll_path = "/home/nras/Mobius/Applications/Persist/persist.so"
+mobius.initialize(dll_path)
+
+
+# Calibration functions
+#calib_fpath = (r"..\mobius_calib_uncert_lmfit.py")
+#cu = imp.load_source('mobius_calib_uncert_lmfit', calib_fpath)
+calib_fpath = os.path.join(parent_dir, "mobius_calib_uncert_lmfit.py")
+# Load the module. I've added lots of comments to help me understand
+# Create a module specification (spec) for the module named mobius_calib_uncert_lmfit from the file located at calib_fpath. The specification contains information about how to load the module.
+spec = importlib.util.spec_from_file_location("mobius_calib_uncert_lmfit", calib_fpath)
+# Create a new module object (mobius_calib_uncert_lmfit) based on the specification created in the previous step. This module object is essentially an empty container that will be populated with the module’s contents.
+mobius_calib_uncert_lmfit = importlib.util.module_from_spec(spec)
+# Add the newly created module object to the sys.modules dictionary under the key "mobius_calib_uncert_lmfit". This step is important because it ensures that the module can be imported and accessed by other parts of the code using the standard import mechanism.
+sys.modules["mobius_calib_uncert_lmfit"] = mobius_calib_uncert_lmfit
+# Execute the module’s code within the context of the newly created module object. It effectively loads the module’s contents (functions, classes, variables, etc.) into the module object, making them available for use.
+spec.loader.exec_module(mobius_calib_uncert_lmfit)
+
+```
+
+```{python apply_filenames}
+#| echo: false
+#dataset = wr.DataSet.setup_from_parameter_and_input_files('..\..\Applications\IncaC\Boyne\persist_params_Boyne.dat', '..\..\Applications\IncaC\Boyne\incac_inputs_Boyne.dat')
+#dataset = wr.DataSet.setup_from_parameter_and_input_files('..\..\Applications\Persist\Tarland\persist_params_Tarland.dat', '..\..\Applications\Persist\Tarland\persist_inputs_Tarland.dat')
+
+# Construct the paths to the parameter and input files
+# Should be dynamic
+#params_path = os.path.join(parent_dir, "Applications", "Persist", "Tarland", "persist_params_Tarland.dat")
+#inputs_path = os.path.join(parent_dir, "Applications", "Persist", "Tarland", "persist_inputs_Tarland.dat")
+two_dirs_up = os.path.abspath(os.path.join(current_dir, "../.."))
+params_path = os.path.join(two_dirs_up, "tweed_persist", "BasinObs_upperlower_testparameters.dat")
+inputs_path = os.path.join(two_dirs_up, "tweed_persist", "BasinObs_upperlower_datainputs.dat")
+
+#params_path = "/home/nras/Mobius/tweed_persist/BasinObs_upper_testparameters.dat"
+#inputs_path = "/home/nras/Mobius/tweed_persist/BasinObs_upper_datainputs.dat"
+
+
+# Use the dynamically constructed paths
+dataset = mobius.DataSet.setup_from_parameter_and_input_files(params_path, inputs_path)
+```
+
+```{python}
+#| echo: false
+comparisons = [
+    ('Reach flow', ['UpperTweed'], 'observed Q', [])
+]
+```
+
+```{python}
+#| echo: false
+index_short_name = {'All':'A', 'Quick':'q', 'Soilwater':'s', 'Groundwater':'g', 'UpperTweed':'r'}
+
+#param_df = cu.get_double_parameters_as_dataframe(dataset, index_short_name=index_short_name)
+param_df = mobius_calib_uncert_lmfit.get_double_parameters_as_dataframe(dataset, index_short_name=index_short_name)
+
+pd.options.display.max_rows = 999
+param_df
+```
+
+```{python}
+#| echo: false
+#| scrolled: true
+dataset.run_model()
+# Print goodness of fit
+mobius_calib_uncert_lmfit.print_goodness_of_fit(dataset, comparisons)
+
+# Plot objective
+mobius_calib_uncert_lmfit.plot_objective(dataset, comparisons)
+plt.show()
+```
+
+```{python}
+#| echo: false
+wanted_names = [
+    'Msnow', 'Tsnow', 'DDFmelt', 'DDET', 'Tc_s', 'Tc_g', 'perc_A_s_s', 'perc_A_s_g',
+]
+
+calib_df = param_df[[any([sn.startswith(n) for n in wanted_names]) for sn in param_df['short_name']]].reset_index(drop=True)
+calib_df
+```
+
+```{python}
+#| echo: false
+params = mobius_calib_uncert_lmfit.parameter_df_to_lmfit(calib_df)
+
+params['perc_A_s_g'].set(expr = '1.0-perc_A_s_s')
+params['Tc_s_A'].min = 1.0
+params['Tc_s_A'].max = 10.0
+params['Tc_g_A'].min = 30.0
+params['Tc_g_A'].max = 200.0
+
+params
+```
+
+```{python}
+#| echo: false
+#| scrolled: true
+
+mi, res = mobius_calib_uncert_lmfit.minimize_residuals(params, dataset, comparisons, method='nelder', norm=False, skip_timesteps=365)
+print('Optimization results\n')
+lmfit.report_fit(res)
+print('\n\nOptimized parameter values:\n')
+res.params.pretty_print(precision=3)
+
+mobius_calib_uncert_lmfit.set_parameter_values(res.params, dataset)
+dataset.write_parameters_to_file('optimized_params.dat')
+```
+
+```{python}
+#| echo: false
+#| scrolled: false
+dataset.run_model()
+mobius_calib_uncert_lmfit.print_goodness_of_fit(dataset, comparisons)
+mobius_calib_uncert_lmfit.plot_objective(dataset, comparisons)
+plt.show()
+```
+
+```{python}
+#| echo: false
+res.params.add('err_q', value = 0.5, min = 0.05, max = 3)
+
+error_param_dict = {'observed Q': 'err_q'}
+
+res.params
+```
+
+```{python}
+#| echo: false
+nworkers = 8
+ntemps   = 1
+nsteps   = 150 # 10000
+nwalk    = 50 # 100
+nburn    = 100 # 1000
+thin     = 1
+init_chains = 'uniform'
+skip_timesteps = 365
+result_path = '/home/nras/Mobius/PythonWrapper/PERSiST/pickled/mcmc_results.pkl'
+chain_plot_path = '/home/nras/Mobius/PythonWrapper/PERSiST/plots/chains.png'
+corner_plot_path = '/home/nras/Mobius/PythonWrapper/PERSiST/plots/corner.png'
+
+settings_dict = {'params':res.params,
+                 'error_param_dict':error_param_dict,
+                 'comparisons':comparisons,
+                 'skip_timesteps':skip_timesteps,
+                 'nworkers':nworkers,
+                 'ntemps':ntemps,
+                 'nsteps':nsteps,
+                 'nwalk':nwalk,
+                 'nburn':nburn,
+                 'thin':thin,
+                 'init_chains':init_chains,
+                 'result_path':result_path,
+                 'chain_path':chain_plot_path,
+                 'corner_path':corner_plot_path,                 
+                }
+
+# Ensure the directory exists
+os.makedirs('pickled', exist_ok=True)
+
+with open('pickled/mcmc_settings.pkl', 'wb') as handle:
+    pickle.dump(settings_dict, handle)
+```
+
+```{python}
+#| echo: false
+optimized_params = "/home/nras/Mobius/PythonWrapper/PERSiST/optimized_params.dat"
+os.environ['OPTIMIZED'] = optimized_params
+os.environ['INPUTS_PATH'] = inputs_path
+
+!cd /home/nras/Mobius && python /home/nras/Mobius/PythonWrapper/PERSiST/persist_calib_uncert.py
+```
+
+```{python}
+#| echo: false
+with open('/home/nras/Mobius/PythonWrapper/PERSiST/pickled/mcmc_results.pkl', 'rb') as handle:
+    result = pickle.load(handle)
+    
+#cu.set_parameter_values(result.params, dataset)
+mobius_calib_uncert_lmfit.set_parameter_values(result.params, dataset)
+dataset.run_model()
+
+dataset.write_parameters_to_file('mcmc_map_params.dat')
+```
+
+```{python}
+#| echo: false
+highest_prob = np.argmax(result.lnprob)
+hp_loc = np.unravel_index(highest_prob, result.lnprob.shape)
+mle_soln = result.chain[hp_loc]
+print(highest_prob)
+print(mle_soln)
+```
+
+```{python}
+#| echo: false
+#TODO: automate this! (we don't want to set the computed ones, but we need them to recompute based on what we set)
+par = result.params
+par['Msnow_A'].set(value = mle_soln[0])
+par['Tsnow_A'].set(value = mle_soln[1])
+par['DDFmelt_A'].set(value = mle_soln[2])
+par['DDET_A'].set(value = mle_soln[3])
+par['Tc_s_A'].set(value = mle_soln[4])
+par['Tc_g_A'].set(value = mle_soln[5])
+par['perc_A_s_s'].set(value = mle_soln[6])
+par['perc_A_s_g'].set(value = mle_soln[7])
+par['err_q']
+
+#cu.set_parameter_values(par, dataset)
+mobius_calib_uncert_lmfit.set_parameter_values(par, dataset)
+dataset.run_model()
+
+mobius_calib_uncert_lmfit.print_goodness_of_fit(dataset, comparisons)
+mobius_calib_uncert_lmfit.plot_objective(dataset, comparisons)
+plt.show()
+
+
+#cu.print_goodness_of_fit(dataset, comparisons)
+#cu.plot_objective(dataset, comparisons)
+
+dataset.write_parameters_to_file('mcmc_map_params.dat')
+```
+
+
