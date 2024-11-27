@@ -108,12 +108,12 @@ true false false
 ###################### Reach and subcatchment characteristics {"Reaches"} ######################
 
 "Terrestrial catchment area" :     #(km2) [0.01, 999999] The terrestrial area of a subcatchment, excluding open water
-2500
-2500
+1502
+4434
 
 "Reach length" :     #(m) [1, 999999] The length of the main stem of the stream / reach in a subcatchment
-160000
-160000
+77250
+67000
 
 "Reach bottom width" :     #(m) [0.1, 9999] The bottom width of the main stem of the stream / reach in a subcatchment
 20

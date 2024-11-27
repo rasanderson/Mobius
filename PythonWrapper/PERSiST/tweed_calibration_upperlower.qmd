@@ -124,7 +124,7 @@ comparisons = [
 
 ```{python}
 #| echo: false
-index_short_name = {'All':'A', 'Quick':'q', 'Soilwater':'s', 'Groundwater':'g', 'UpperTweed':'ru', 'LowerTweed':'rl'}
+index_short_name = {'All':'A', 'Quick':'q', 'Soilwater':'s', 'Groundwater':'g', 'UpperTweed':'r', 'LowerTweed':'r'}
 
 #param_df = cu.get_double_parameters_as_dataframe(dataset, index_short_name=index_short_name)
 param_df = mobius_calib_uncert_lmfit.get_double_parameters_as_dataframe(dataset, index_short_name=index_short_name)
