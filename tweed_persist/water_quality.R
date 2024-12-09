@@ -169,3 +169,7 @@ upper_tot_phosph_1d <- upper_tot_phosph_1d[is.na(upper_tot_phosph_1d$result) != 
 ggplot() +
   geom_point(data = upper_tot_phosph_1d, aes(x = samp_date, y = result, colour = "Interpol")) +
   geom_point(data = upper_tot_phosph, aes(x = samp_date, y = result, colour = "Raw"))
+
+# Met data
+# Note, to download using wget use, for example
+# wget -v -O ~/tmp/2005_tas.nc https://catalogue.ceh.ac.uk/datastore/eidchub/835a50df-e74f-4bfb-b593-804fd61d5eab/tas/chess-met_tas_gb_1km_daily_20050101-20050131.nc --user=roy.sanderson@newcastle.ac.uk --password=pREfiXeidc! --auth-no-challenge
