@@ -113,76 +113,63 @@ rm("tot_phosph_gap")
 # Nitrate 28.96 day gap for lower Tweed, 15.38 day gap for upper Tweed
 # Total Phosphorus 31.15 gap lower Tweed, 15.53 day gap for upper Tweed 
 
-# Use interpolation to set both upper and lower to every 14 days
+# Use interpolation to set both upper and lower to every day
 # Using just monthly model might be too course given hydrology data is daily
-# Create a regular sequence of dates at 14-day intervals
+# Create a regular sequence of dates at daily intervals
 start_date <- as.Date("2005-01-01") # Year-month-day
 end_date   <- as.Date("2019-12-31")
-regular_dates <- seq.Date(from = start_date, to = end_date, by = "14 days")
+regular_dates <- seq.Date(from = start_date, to = end_date, by = "1 days")
 
 # Merge the original data with the regular dates
-lower_nitrate_14d <- lower_nitrate %>%
+lower_nitrate_1d <- lower_nitrate %>%
   arrange(samp_date) %>%
   complete(samp_date = regular_dates)
 # Interpolate the result values to the new regular dates
-lower_nitrate_14d$result <- na.approx(lower_nitrate_14d$result,
-                                     x = lower_nitrate_14d$samp_date,
+lower_nitrate_1d$result <- na.approx(lower_nitrate_1d$result,
+                                     x = lower_nitrate_1d$samp_date,
                                      na.rm = FALSE)
-lower_nitrate_14d <- lower_nitrate_14d[is.na(lower_nitrate_14d$result) != TRUE, ]
+lower_nitrate_1d <- lower_nitrate_1d[is.na(lower_nitrate_1d$result) != TRUE, ]
 ggplot() +
-  geom_point(data = lower_nitrate_14d, aes(x = samp_date, y = result, colour = "Interpol")) +
+  geom_point(data = lower_nitrate_1d, aes(x = samp_date, y = result, colour = "Interpol")) +
   geom_point(data = lower_nitrate, aes(x = samp_date, y = result, colour = "Raw"))
 # Merge the original data with the regular dates
-upper_nitrate_14d <- upper_nitrate %>%
+upper_nitrate_1d <- upper_nitrate %>%
   arrange(samp_date) %>%
   complete(samp_date = regular_dates)
 # Interpolate the result values to the new regular dates
-upper_nitrate_14d$result <- na.approx(upper_nitrate_14d$result,
-                                      x = upper_nitrate_14d$samp_date,
+upper_nitrate_1d$result <- na.approx(upper_nitrate_1d$result,
+                                      x = upper_nitrate_1d$samp_date,
                                       na.rm = FALSE)
-upper_nitrate_14d <- upper_nitrate_14d[is.na(upper_nitrate_14d$result) != TRUE, ]
+upper_nitrate_1d <- upper_nitrate_1d[is.na(upper_nitrate_1d$result) != TRUE, ]
 ggplot() +
-  geom_point(data = upper_nitrate_14d, aes(x = samp_date, y = result, colour = "Interpol")) +
+  geom_point(data = upper_nitrate_1d, aes(x = samp_date, y = result, colour = "Interpol")) +
   geom_point(data = upper_nitrate, aes(x = samp_date, y = result, colour = "Raw"))
 # Same for total phosphorus
 # Lower
-lower_tot_phosph_14d <- lower_tot_phosph %>%
+lower_tot_phosph_1d <- lower_tot_phosph %>%
   arrange(samp_date) %>%
   complete(samp_date = regular_dates)
 # Interpolate the result values to the new regular dates
-lower_tot_phosph_14d$result <- na.approx(lower_tot_phosph_14d$result,
-                                      x = lower_tot_phosph_14d$samp_date,
+lower_tot_phosph_1d$result <- na.approx(lower_tot_phosph_1d$result,
+                                      x = lower_tot_phosph_1d$samp_date,
                                       na.rm = FALSE)
-lower_tot_phosph_14d <- lower_tot_phosph_14d[is.na(lower_tot_phosph_14d$result) != TRUE, ]
+lower_tot_phosph_1d <- lower_tot_phosph_1d[is.na(lower_tot_phosph_1d$result) != TRUE, ]
 ggplot() +
-  geom_point(data = lower_tot_phosph_14d, aes(x = samp_date, y = result, colour = "Interpol")) +
+  geom_point(data = lower_tot_phosph_1d, aes(x = samp_date, y = result, colour = "Interpol")) +
   geom_point(data = lower_tot_phosph, aes(x = samp_date, y = result, colour = "Raw"))
 # Upper
-upper_tot_phosph_14d <- upper_tot_phosph %>%
+upper_tot_phosph_1d <- upper_tot_phosph %>%
   arrange(samp_date) %>%
   complete(samp_date = regular_dates)
 # Interpolate the result values to the new regular dates
-upper_tot_phosph_14d$result <- na.approx(upper_tot_phosph_14d$result,
-                                         x = upper_tot_phosph_14d$samp_date,
+upper_tot_phosph_1d$result <- na.approx(upper_tot_phosph_1d$result,
+                                         x = upper_tot_phosph_1d$samp_date,
                                          na.rm = FALSE)
-upper_tot_phosph_14d <- upper_tot_phosph_14d[is.na(upper_tot_phosph_14d$result) != TRUE, ]
+upper_tot_phosph_1d <- upper_tot_phosph_1d[is.na(upper_tot_phosph_1d$result) != TRUE, ]
 ggplot() +
-  geom_point(data = upper_tot_phosph_14d, aes(x = samp_date, y = result, colour = "Interpol")) +
+  geom_point(data = upper_tot_phosph_1d, aes(x = samp_date, y = result, colour = "Interpol")) +
   geom_point(data = upper_tot_phosph, aes(x = samp_date, y = result, colour = "Raw"))
 
-
-# As far as I can tell Mobius needs the same timesteps for hydrology as for
-# water quality. We have roughly (!) monthly data for water quality, but daily
-# data for hydrology (Q).
-# For speed, interpolate to daily data and see if that works first.
-library(lubridate)
-raw_wq$samp_date_yday <- yday(raw_wq$samp_date)
-sinday <- sin(2 * pi * raw_wq$samp_date_yday/365.25)
-cosday <- cos(2 * pi * raw_wq$samp_date_yday/365.25)
-n_lm <- lm(log1p(tot_nitrogen) ~ sinday + cosday + samp_date, data = raw_wq)
-summary(n_lm)
-raw_wq$n_fit <- expm1(fitted(n_lm))
-ggplot(raw_wq, aes(x = samp_date, y = tot_nitrogen)) +
-  geom_point() +
-  geom_line(aes(y = n_fit))
-# Hmm. Too crude. May have to use monthly data.
+# Met data
+# Note, to download using wget use, for example
+# wget -v -O ~/tmp/2005_tas.nc https://catalogue.ceh.ac.uk/datastore/eidchub/835a50df-e74f-4bfb-b593-804fd61d5eab/tas/chess-met_tas_gb_1km_daily_20050101-20050131.nc --user=roy.sanderson@newcastle.ac.uk --password= --auth-no-challenge
