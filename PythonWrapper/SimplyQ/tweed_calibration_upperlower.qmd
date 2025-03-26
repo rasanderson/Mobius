@@ -201,7 +201,7 @@ optimized_params = "/home/nras/Mobius/PythonWrapper/SimplyQ/optimized_params.dat
 os.environ['OPTIMIZED'] = optimized_params
 os.environ['INPUTS_PATH'] = inputs_path
 
-!cd /home/nras/Mobius && python /home/nras/Mobius/PythonWrapper/SimplyQ/persist_calib_uncert.py
+!cd /home/nras/Mobius && python /home/nras/Mobius/PythonWrapper/SimplyQ/simplyp_calib_uncert.py
 ```
 
 ```{python}
