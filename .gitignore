@@ -24,5 +24,6 @@ PythonWrapper/PERSiST/calibration_files/*
 PythonWrapper/PERSiST/tweed_calibration_files/*
 PythonWrapper/PERSiST/tweed_calibration_upper_files/
 PythonWrapper/PERSiST/tweed_calibration_lower_files/
-PythonWrapper/PERSiST/tweed_callibration_upperlower_files*
+PythonWrapper/PERSiST/tweed_calibration_upperlower_files
+PythonWrapper/PERSiST/tweed_calibration_upperlower.html
 met_office/raw_nc/

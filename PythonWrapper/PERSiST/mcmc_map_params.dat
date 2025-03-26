@@ -1,4 +1,4 @@
-# Parameter file generated for model PERSiST, containing modules (PERSiST V1.4) at 2024-11-28 12:53:02
+# Parameter file generated for model PERSiST, containing modules (PERSiST V1.4) at 2025-03-18 16:49:37
 
 index_sets:
 "Landscape units" : {"All"}
@@ -27,13 +27,13 @@ parameters:
 	# Hydrology by land class ("Landscape units") #
 
 	"Snow multiplier" :     #(dimensionless) [0.5, 1.5] Adjustment factor used to account for bias in the relationship between snow measured in the gauge and effective snowfall amounts falling
-	0.995082373789851
+	1.27064556619566
 
 	"Snow melt temperature" :     #(°C) [-4, 4] The temperature at or above which snow can melt
-	-0.151782772416618
+	-0.00850220205213226
 
 	"Degree day melt factor" :     #(mm/°C/day) [1, 4] Describes the dependency of snow melt rates on temperature. The parameter represents the number of millimetres water melted per degree celcius above the snow melt temperature
-	1.78570896695628
+	2.31278753252074
 
 	"Rain multiplier" :     #(dimensionless) [0.5, 1.5] Adjustment factor used to account for bias in the relationship between rain measured in the gauge and effective rainfall amounts falling
 	1
@@ -42,7 +42,7 @@ parameters:
 	0
 
 	"Degree day evapotranspiration" :     #(mm/°C/day) [0.05, 0.2] Describes the baseline dependency of evapotranspiration on air temperature. The parameter represents the number of millimetres water evapotranspired per degree celcius above the growing degree threshold when evapotranspiration rates are not soil moisture limited
-	0.155512752584032
+	0.156849075440055
 
 	"Growing degree threshold" :     #(°C) [-4, 4] The temperature at or above which plant growth and hence evapotranspiration are assumed to occur
 	-1
@@ -80,8 +80,8 @@ parameters:
 
 	"Time constant" :     #(days) [1, 9999] The inverse of the rate at which water flows out of a box
 	1
-	4.29355200376566
-	75.8110934702245
+	4.31770640897914
+	87.9853002606848
 
 	"Evapotranspiration adjustment" :     #(dimensionless) [0, 10] A factor to slow the rate of evapotranspiration when the depth of water in a box is below the retained water depth. Special  values include 0 (no slowing of evapotranspiration, 1 (slowing is proportional to the depth of water remaining in the bucket) and values above 10 (all evapotranspiration effectively stops when the depth of water is below the retained water depth)
 	0
@@ -155,7 +155,7 @@ parameters:
 
 	"Percolation matrix" :     #(dimensionless) [0, 1] The fraction of runoff that goes from one box to another
 	0 1 0
-	1 0.676582752390274 0.346938003225664
+	1 0.689775266796939 0.330266462432569
 	1 0 1
 
 
