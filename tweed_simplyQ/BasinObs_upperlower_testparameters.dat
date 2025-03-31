@@ -19,7 +19,7 @@ parameters:
 
 	# Potential evapotranspiration ("Landscape units") #
 
-	"Degree-day evapotranspiration" :     #(mm/°C/day) [0.05, 0.2] 
+	"Degree day evapotranspiration" :     #(mm/°C/day) [0.05, 0.2] 
 	0.157259860661406 0.157259860661406 0.157259860661406
 
 	"Minimal temperature for evapotranspiration" :     #(°C) [-5, 5] 

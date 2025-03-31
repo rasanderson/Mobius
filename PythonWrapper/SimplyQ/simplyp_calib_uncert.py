@@ -8,28 +8,12 @@ import pickle
 from scipy.stats import norm
 import os
 
-## Initialise wrapper
-#wrapper_fpath = (r'/home/nras/Mobius/PythonWrapper/mobius.py')
-##wr = imp.load_source('mobius', wrapper_fpath)
-##wr.initialize('../../Applications/SimplyP/simplyp.so')
-##wr.initialize('../../Applications/SimplyP/simplyp.dll')
-## Load the module from the specified file path
-#spec = importlib.util.spec_from_file_location('mobius', wrapper_fpath)
-#mobius_module = importlib.util.module_from_spec(spec)
-#spec.loader.exec_module(mobius_module)
-#
-## Initialize the module
-#current_dir = os.getcwd()
-#wrapper_fpath = os.path.join(current_dir, 'PythonWrapper', 'mobius.py')
-#spec = importlib.util.spec_from_file_location('mobius', wrapper_fpath)
-#wr = importlib.util.module_from_spec(spec)
-#spec.loader.exec_module(wr)
-#mobius_module.initialize('/home/nras/Mobius/Applications/SimplyP/simplyp.so')
 
 # This follows syntax of persist_calib_uncert.py which worked
 # Initialise wrapper
-current_dir = os.getcwd()
-wrapper_fpath = os.path.join(current_dir, 'PythonWrapper', 'mobius.py')
+#current_dir = os.getcwd()
+#wrapper_fpath = os.path.join(current_dir, 'PythonWrapper', 'mobius.py')
+wrapper_fpath = (r'/home/nras/Mobius/PythonWrapper/mobius.py')
 spec = importlib.util.spec_from_file_location('mobius', wrapper_fpath)
 wr = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(wr)
@@ -41,12 +25,6 @@ calib_fpath = (r'/home/nras/Mobius/PythonWrapper/mobius_calib_uncert_lmfit.py')
 spec = importlib.util.spec_from_file_location('mobius_calib_uncert_lmfit', calib_fpath)
 cu = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(cu)
-
-#cu = imp.load_source('mobius_calib_uncert_lmfit', calib_fpath)
-#speccu = importlib.util.spec_from_file_location('mobius_calib_uncert_lmfit', calib_fpath)
-#mobius_modulecu = importlib.util.module_from_spec(speccu)
-#speccu.loader.exec_module(mobius_modulecu)
-
 
 
 def log_likelihood(params, error_param_dict, comparisons, skip_timesteps=0):
@@ -98,8 +76,8 @@ def log_likelihood(params, error_param_dict, comparisons, skip_timesteps=0):
 
 #dataset = wr.DataSet.setup_from_parameter_and_input_files('../../Applications/SimplyP/Tarland/TarlandParameters_v0-3.dat', 
 #                                                          '../../Applications/SimplyP/Tarland/TarlandInputs.dat')
-#dataset = wr.DataSet.setup_from_parameter_and_input_files('/home/nras/Mobius/tweed_persist/BasinObs_upperlower_testparameters.dat', 
-#                                                          '/home/nras/Mobius/tweed_persist/BasinObs_upperlower_dtainputs.dat')
+dataset = wr.DataSet.setup_from_parameter_and_input_files('/home/nras/Mobius/tweed_simplyQ/BasinObs_upperlower_testparameters.dat', 
+                                                          '/home/nras/Mobius/tweed_simplyQ/BasinObs_upperlower_datainputs.dat')
 
 def setup_dataset(optimized_params, input_path):
     dataset = wr.DataSet.setup_from_parameter_and_input_files(optimized_params, input_path)
@@ -108,7 +86,8 @@ def setup_dataset(optimized_params, input_path):
 if __name__ == '__main__': # NOTE: this is necessary for parallelisation!
     
     # Unpack options from pickled file
-    with open('/home/nras/Mobius/PythonWrapper/SimplyQ/pickled/mcmc_settings.pkl', 'rb') as handle:
+    # with open('/home/nras/Mobius/PythonWrapper/SimplyQ/results/mcmc_settings.pkl', 'rb') as handle:
+    with open('/home/nras/Mobius/tweed_simplyQ/results/mcmc_settings.pkl', 'rb') as handle:
         settings_dict = pickle.load(handle)
 
     params = settings_dict['params']

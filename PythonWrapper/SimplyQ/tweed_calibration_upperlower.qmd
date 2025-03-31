@@ -19,7 +19,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import datetime as dt
-import importlib
+from importlib.machinery import SourceFileLoader
 import networkx
 import numdifftools
 import runpy
@@ -28,50 +28,36 @@ import runpy
 warnings.filterwarnings("ignore")
 plt.style.use('ggplot')
 ```
+# 1 Introduction
+This is based on the simplyP example Jupyter notebook which seems the best
+documented of the set.
 
 ```{python}
 #| echo: false
+# Initialise wrapper
+wr = SourceFileLoader("mobius", r"/home/nras/Mobius/PythonWrapper/mobius.py").load_module()
+cu = SourceFileLoader("mobius_calib_uncert_lmfit", r"/home/nras/Mobius/PythonWrapper/mobius_calib_uncert_lmfit.py").load_module()
 
-# Get the current working directory
-current_dir = os.getcwd()
-
-# Get the parent directory
-parent_dir = os.path.dirname(current_dir)
-
-# Construct the full path to the mobius.py file
-wrapper_fpath = os.path.join(parent_dir, "mobius.py")
-
-# Load the module
-spec = importlib.util.spec_from_file_location("mobius", wrapper_fpath)
-mobius = importlib.util.module_from_spec(spec)
-sys.modules["mobius"] = mobius
-spec.loader.exec_module(mobius)
-# Initialize with the correct path
-dll_path = "/home/nras/Mobius/Applications/SimplyQ/simplyQ.so"
-mobius.initialize(dll_path)
-
-
-# Calibration functions
-calib_fpath = os.path.join(parent_dir, "mobius_calib_uncert_lmfit.py")
-# Create a module specification (spec) for the module named mobius_calib_uncert_lmfit from the file located at calib_fpath. The specification contains information about how to load the module.
-spec = importlib.util.spec_from_file_location("mobius_calib_uncert_lmfit", calib_fpath)
-# Create a new module object (mobius_calib_uncert_lmfit) based on the specification created in the previous step. This module object is essentially an empty container that will be populated with the module’s contents.
-mobius_calib_uncert_lmfit = importlib.util.module_from_spec(spec)
-# Add the newly created module object to the sys.modules dictionary under the key "mobius_calib_uncert_lmfit". This step is important because it ensures that the module can be imported and accessed by other parts of the code using the standard import mechanism.
-sys.modules["mobius_calib_uncert_lmfit"] = mobius_calib_uncert_lmfit
-# Execute the module’s code within the context of the newly created module object. It effectively loads the module’s contents (functions, classes, variables, etc.) into the module object, making them available for use.
-spec.loader.exec_module(mobius_calib_uncert_lmfit)
-
+wr.initialize('/home/nras/Mobius/Applications/SimplyQ/simplyQ.so')   # .so on Linux
 ```
+
+# 2. Load observed datasets and model structure
+This should happen next
 
 ```{python apply_filenames}
 #| echo: false
+current_dir = os.getcwd()
 two_dirs_up = os.path.abspath(os.path.join(current_dir, "../.."))
 params_path = os.path.join(two_dirs_up, "tweed_simplyQ", "BasinObs_upperlower_testparameters.dat")
 inputs_path = os.path.join(two_dirs_up, "tweed_simplyQ", "BasinObs_upperlower_datainputs.dat")
 # Use the dynamically constructed paths
-dataset = mobius.DataSet.setup_from_parameter_and_input_files(params_path, inputs_path)
+dataset = wr.DataSet.setup_from_parameter_and_input_files(params_path, inputs_path)
+
 ```
+
+
+# 3. Link simulated and observed datasets
+Also does comparisons which is where need to check.
 
 ```{python}
 #| echo: false
@@ -81,81 +67,246 @@ comparisons = [
 ]
 ```
 
+
+# 4. Manual calibration
+This should print out a reasonable-looking table but has caused problems. Coded
+reaches as r1 and r2 to match a comment in one file by Leah Jackson-Blake.
+
 ```{python}
 #| echo: false
-index_short_name = {'All':'A', 'Quick':'q', 'Soilwater':'s', 'Groundwater':'g', 'UpperTweed':'r', 'LowerTweed':'r'}
+#index_short_name = {'All':'A', 'Quick':'q', 'Soilwater':'s', 'Groundwater':'g', 'UpperTweed':'r', 'LowerTweed':'r'}
+index_short_name = {'Arable':'A', 'Improved grassland':'IG', 'Semi-natural':'SN', 'UpperTweed':'r1', 'LowerTweed':'r2'}
 
-param_df = mobius_calib_uncert_lmfit.get_double_parameters_as_dataframe(dataset, index_short_name=index_short_name)
+param_df = cu.get_double_parameters_as_dataframe(dataset, index_short_name=index_short_name)
 
 pd.options.display.max_rows = 999
 param_df
 ```
+
+Note the index column in this dataframe, which specifies how each parameter varies within the model structure. For example, the Vegetation cover factor takes different values for different land use classes, while the Mean slope of land parameters vary both by land class and river reach.
+
+For this particular dataset, the default values in the initial_value column were from LJ-B example informed by manual calibration. We can easily run the model with these values and assess the goodness-of-fit. The functions below produce one plot and one set of summary statistics for each dataset in comparisons.
+
 
 ```{python}
 #| echo: false
 #| scrolled: true
 dataset.run_model()
 # Print goodness of fit
-mobius_calib_uncert_lmfit.print_goodness_of_fit(dataset, comparisons)
+cu.print_goodness_of_fit(dataset, comparisons)
 
 # Plot objective
-mobius_calib_uncert_lmfit.plot_objective(dataset, comparisons)
+cu.plot_objective(dataset, comparisons)
 plt.show()
 ```
+
+# 5. Auto-calibration
+## 5.1 Choose parameters to calibrate
+This should be informed by system knowledge.
 
 ```{python}
 #| echo: false
 wanted_names = [
     'Msnow', 'Tsnow', 'DDFmelt', 'DDET', 'Tc_s', 'Tc_g', 'perc_A_s_s', 'perc_A_s_g',
 ]
-
+# The following code selects any parameter with short_name *beginning* with any
+# of the strings in the 'wanted_names' list. This means e.g. that if you replace
+# 'Ts_SN' with 'Ts' in the above list, it will select all the parameters
+# starting with Ts, i.e. all the soil water time constants.
 calib_df = param_df[[any([sn.startswith(n) for n in wanted_names]) for sn in param_df['short_name']]].reset_index(drop=True)
 calib_df
 ```
 
+Having defined a dataframe of parameters we wish to calibrate, complete with short names, initial values and minimum to maximum ranges, we can instantiate an LMFit Parameters object, which makes it easy to keep track of bounded parameter values. Here, suffixes _A, _IG and _SN refer to arable, improved grassland and semi-natural. r1 and r2 would be reach 1 (UpperTweed), and reach 2 (LowerTweed) etc., but need to be in list originally.
+
 ```{python}
 #| echo: false
-params = mobius_calib_uncert_lmfit.parameter_df_to_lmfit(calib_df)
-
-params['perc_A_s_g'].set(expr = '1.0-perc_A_s_s')
-params['Tc_s_A'].min = 1.0
-params['Tc_s_A'].max = 10.0
-params['Tc_g_A'].min = 30.0
-params['Tc_g_A'].max = 200.0
-
-params
+# Convert to LMFit parameter object
+params = cu.parameter_df_to_lmfit(calib_df)
 ```
+
+It is possible to modify prior ranges for each paramter. Initial values can also be changed using e.g. params['DDFmelt'].value = 2.5, and calibration can be disabled entirely for specific parameters using e.g. params['DDFmelt'].vary = False. Note that parameters must be referred to by their short_name attribute. Note: params will return a dataframe showing the current user choices for the calibrating parameters. (In a Python script/terminal, params.pretty_print provides similar output).
+
+```{python}
+params['DDFmelt'].min = 0.5
+params['DDFmelt'].max = 5.0
+
+params.pretty_print(precision = 3)
+```
+
+## 5.2 Least-squares optimisation
+LMFit provides a convenient API to several Python optimisers (see here for details).
+
+Some of these optimisers also provide confidence intervals and correlations for the "best" parameters. These are approximate, but they provide useful information about the model and may help you to refine parameter ranges (or even the model structure) before undertaking a more comprehensive calibration exercise using MCMC (see below).
+
+All of these optimisers aim to minimise the sum of squared residuals. From a "formal" statistical point of view, this is equivalent to assuming a likelihood function with independent and identically distributed (i.i.d.) Gaussian errors, which may not be the best choice. Nevertheless, minimising the sum of squared errors is often a good starting point, especially given the range of optimisers available.
+
+Note: Performance can vary dramatically between optimisers, so it's often a good idea to try a few different alternatives. This will also allow you to check whether the same "optimum" is identified by the various algorithms.
+
 
 ```{python}
 #| echo: false
 #| scrolled: true
-
-mi, res = mobius_calib_uncert_lmfit.minimize_residuals(params, dataset, comparisons, method='nelder', norm=False, skip_timesteps=365)
+# Minimise using Levenberg–Marquardt (gives similar output to Nelder-Mead, 
+# but in this case it's faster)
+mi, res = cu.minimize_residuals(params, dataset, comparisons, method='nelder', norm=False, skip_timesteps=365)
 print('Optimization results\n')
 lmfit.report_fit(res)
 print('\n\nOptimized parameter values:\n')
 res.params.pretty_print(precision=3)
 
-mobius_calib_uncert_lmfit.set_parameter_values(res.params, dataset)
-dataset.write_parameters_to_file('optimized_params.dat')
+cu.set_parameter_values(res.params, dataset)
+dataset.write_parameters_to_file('/home/nras/Mobius/PythonWrapper/SimplyQ/optimized_params.dat')
 ```
 
+The optimiser has run the model roughly 500 times in around 50 seconds. Output includes estimated parameter correlations and confidence intervals: note, for example, the Stderr column that has been added to the parameters table immediately above. If there are any correlations between the parameters above 0.1 these will also be displayed.
+
+
+## 5.3 Visualise results
+To see the model output for the optimised parameter values, first use set_parameter_values to update the default values, and then re-run the model, as above.
+
 ```{python}
-#| echo: false
-#| scrolled: false
+cu.set_parameter_values(res.params, dataset)
 dataset.run_model()
-mobius_calib_uncert_lmfit.print_goodness_of_fit(dataset, comparisons)
-mobius_calib_uncert_lmfit.plot_objective(dataset, comparisons)
+cu.print_goodness_of_fit(dataset, comparisons)
+cu.plot_objective(dataset, comparisons)
 plt.show()
 ```
 
+Comparing the goodness-of-fit statistics from the optimiser to those from the manual calibration (section 4), you can see that the optimiser has certainly found "better" parameter sets from the point of view of the summary statistics (Nash-Sutcliffe scores etc.). However, if you look at the plots, the "by eye" fit from the manual calibration is still clearly better. This is because the optimiser is minimising the sum of squared errors - a metric that strongly penalises large outliers. The "best" result from the optimiser therefore tries to fit the peaks in the observed series, at the expense of poor fits elsewhere. Since metrics like N-S are closely related to the sum of squared errors, this approach gives impressive summary statistics, but actually rather poor simulations. The choice of appropriate summary metrics for assessing water quality time series is still an active area of research.
+
+
+# 6. Full calibration and uncertainty analysis using MCMC
+Bayesian MCMC provides much more comprehensive information regarding model performance, but it's also more complicated and computationally intensive. Although it's perfectly possible to begin your model analysis with MCMC, it's usually a good idea to experiment with the optimisation options described above first, and then apply MCMC as a second step.
+
+## 6.1. Likelihood function
+The (log) likelihood function describes the probability that the model, when run with a given set of parameters, will reproduce the observed data. Formulating an appropriate likelihood function is both important and challenging, and there's a lot of literature on the subject. In this example, we'll assume heteroscedastic, independent Gaussian errors, which is one step better than the simplest/commonest i.i.d. approach. If you'd like to know more about where this approach comes from, see here (especially section 2 of notebook 6).
+
+In order to run parallelised MCMC, you need to create a separate Python file similar to simplyp_calib_uncert.py. This file defines your log likelihood function and provides the Mobius dataset as a "top-level object", which makes it amenable to parallel processing.
+
+## 6.2. Error terms
+Using a formal statistical likelihood involves estimating some additional error terms. We'll assume that the error distribution for all three phosphorus species is the same, so we need three terms in total (for Q, SS and P) [ initially this is just SimplyQ so only one error term, err_q, below]. These can be added to the result obtained from the optimiser in section 5, above.
+
+Note: Names for error terms must begin with err_. Conversely, short names for model parameters must not begin with err_.
+
+
 ```{python}
-#| echo: false
-res.params.add('err_q', value = 0.5, min = 0.05, max = 3)
+# Add error params
+res.params.add(lmfit.Parameter('err_q_r1', value=0.5, min=0.05, max=3, user_data={}))
+res.params.add(lmfit.Parameter('err_q_r2', value=0.5, min=0.05, max=3, user_data={}))
+#res.params.add(lmfit.Parameter('err_ss', value=0.5, min=0.05, max=5, user_data={}))
+#res.params.add(lmfit.Parameter('err_p', value=0.5, min=0.05, max=2, user_data={}))
 
-error_param_dict = {'observed Q': 'err_q'}
+res.params.pretty_print(columns=['value', 'min', 'max', 'vary'])
+```
 
-res.params
+We also need to define a dictionary matching each of the observed data series in comparisons to the appropriate error term.
+
+Note: The user_data={} is required. This dictionary will be updated after the MCMC to contain the median and MAP parameter estimates.
+
+```{python}
+## Link error params to model datasets for Morsa
+#error_param_dict = {'Observed Q':          'err_q',
+#                    'Observed SS at Kure': 'err_ss',
+#                    'Observed TP at Kure': 'err_p',
+#                    'Observed TDP at Kure':'err_p',
+#                    'Observed PP at Kure': 'err_p',
+#                   }
+
+# Link error params to model datasets for Tweed
+error_param_dict = {'observed Q':  'err_q_r1',
+                    'observed Q':  'err_q_r2',
+                   }
+```
+
+Note: LMFit parameter objects provide additional features for linking and combining parameters using the expr argument - see here for further details. The error terms for TDP and PP could equally well have been defined as follows:
+
+```
+# Add error params
+res.params.add('err_q', value=0.5, min=0.05, max=3, user_data={})
+res.params.add('err_ss', value=0.5, min=0.05, max=5, user_data={})
+res.params.add('err_tp', value=0.5, min=0.05, max=2, user_data={})
+res.params.add('err_tdp', expr='err_tp', user_data={})             # Use a single error term for all P types
+res.params.add('err_pp', expr='err_tp', user_data={})              # Use a single error term for all P types 
+```
+
+Although not necessary here, this kind of syntax is especially useful when dealing with parameters representing proportions, where the total need to be constant.
+
+## 6.3. MCMC options
+In order to run the MCMC in parallel, all the settings from above are added to a dictionary and "pickled". Some additional options are specified below.
+
+```{python}
+# emcee setup
+nworkers = 32   # Number of cores/processes for parallelisation
+ntemps = 1      # Number of temperatures for parallel tempering (use 1 for default ensemble sampler)
+nsteps = 1000   # Number of steps per chain
+nwalk = 100     # Number of chains/walkers
+nburn = 500     # Number of steps to discard as burn-in
+thin = 1        # Keep only every 'thin' steps to reduce chain auto-correlation
+
+# Chain initialisation
+# 'uniform' => Chain starting locations sampled uniformly from prior
+# 'optimum' => Chain starting locations sampled from a small Gaussian ball in vicinity of optimum
+init_chains = 'optimum'  # Or 'optimum'. 
+
+skip_timesteps = 30  # Number of time steps to skip before calulating fit
+
+# Result file paths
+result_path = r'results/mcmc_results.pkl'
+chain_plot_path = r'results/chains.png'
+corner_plot_path = r'results/corner.png'
+```
+
+```{python}
+# Note: you have to create a 'results' folder in the same folder as this notebook for the code to run properly
+
+# Save settings for passing to MCMC
+settings_dict = {'params':res.params,
+                 'error_param_dict':error_param_dict,
+                 'comparisons':comparisons,
+                 'skip_timesteps':skip_timesteps,
+                 'nworkers':nworkers,
+                 'ntemps':ntemps,
+                 'nsteps':nsteps,
+                 'nwalk':nwalk,
+                 'nburn':nburn,
+                 'thin':thin,
+                 'init_chains':init_chains,
+                 'result_path':result_path,
+                 'chain_path':chain_plot_path,
+                 'corner_path':corner_plot_path,                 
+                }
+
+# Ensure the directory exists
+os.makedirs('/home/nras/Mobius/tweed_simplyQ/results', exist_ok=True)
+
+with open('/home/nras/Mobius/tweed_simplyQ/results/mcmc_settings.pkl', 'wb') as handle:
+    pickle.dump(settings_dict, handle)
+```
+
+## 6.4. Run MCMC
+Important note: Before running the code below, it is important to check the dataset paths in simplyp_calib_uncert.py lines 62 and 63 to make sure they match your catchment of interest (i.e. Morsa or Tarland). At present, these paths cannot be passed "dynamically" using the dictionary above, as this breaks parallelisation of the MCMC (see section 6.1, above). We hope to fix this eventually, but for the present these dataset paths must be hard-coded. The lines to edit look like this
+
+```
+dataset = wr.DataSet.setup_from_parameter_and_input_files('../../Applications/SimplyP/XXXX/XXXXParameters_v0-3.dat', 
+                                                          '../../Applications/SimplyP/XXXX/XXXXInputs.dat')
+```
+
+and the four occurrences of XXXX should be replaced with either Tarland or Morsa.
+```{python}
+## Try importing as a module
+#import simplyp_calib_uncert
+#
+## Run the script
+#simplyp_calib_uncert.main()  # Hopefully main function works
+optimized_params = "/home/nras/Mobius/PythonWrapper/SimplyQ/optimized_params.dat"
+os.environ['OPTIMIZED'] = optimized_params
+os.environ['INPUTS_PATH'] = inputs_path
+!cd /home/nras/Mobius && python /home/nras/Mobius/PythonWrapper/SimplyQ/simplyp_calib_uncert.py
+
+#with open('/home/nras/Mobius/PythonWrapper/SimplyQ/simplyp_calib_uncert.py') as f:
+#    exec(f.read())
+
 ```
 
 ```{python}
@@ -168,7 +319,7 @@ nburn    = 100 # 1000
 thin     = 1
 init_chains = 'uniform'
 skip_timesteps = 365
-result_path = '/home/nras/Mobius/PythonWrapper/SimplyQ/pickled/mcmc_results.pkl'
+result_path = '/home/nras/Mobius/PythonWrapper/SimplyQ/results/mcmc_results.pkl'
 chain_plot_path = '/home/nras/Mobius/PythonWrapper/SimplyQ/plots/chains.png'
 corner_plot_path = '/home/nras/Mobius/PythonWrapper/SimplyQ/plots/corner.png'
 
@@ -189,19 +340,23 @@ settings_dict = {'params':res.params,
                 }
 
 # Ensure the directory exists
-os.makedirs('pickled', exist_ok=True)
+os.makedirs('results', exist_ok=True)
 
 with open('pickled/mcmc_settings.pkl', 'wb') as handle:
     pickle.dump(settings_dict, handle)
 ```
 
+
+
 ```{python}
 #| echo: false
-optimized_params = "/home/nras/Mobius/PythonWrapper/SimplyQ/optimized_params.dat"
-os.environ['OPTIMIZED'] = optimized_params
-os.environ['INPUTS_PATH'] = inputs_path
+#optimized_params = "/home/nras/Mobius/PythonWrapper/SimplyQ/optimized_params.dat"
+#os.environ['OPTIMIZED'] = optimized_params
+#os.environ['INPUTS_PATH'] = inputs_path#
+#
+#!cd /home/nras/Mobius && python /home/nras/Mobius/PythonWrapper/SimplyQ/simplyp_calib_uncert.py
 
-!cd /home/nras/Mobius && python /home/nras/Mobius/PythonWrapper/SimplyQ/simplyp_calib_uncert.py
+
 ```
 
 ```{python}
