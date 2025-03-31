@@ -47,7 +47,7 @@ mobius = importlib.util.module_from_spec(spec)
 sys.modules["mobius"] = mobius
 spec.loader.exec_module(mobius)
 # Initialize with the correct path
-dll_path = "/home/nras/Mobius/Applications/Persist/persist.so"
+dll_path = "/home/nras/Mobius/Applications/SimplyQ/simplyQ.so"
 mobius.initialize(dll_path)
 
 
@@ -67,8 +67,8 @@ spec.loader.exec_module(mobius_calib_uncert_lmfit)
 ```{python apply_filenames}
 #| echo: false
 two_dirs_up = os.path.abspath(os.path.join(current_dir, "../.."))
-params_path = os.path.join(two_dirs_up, "tweed_persist", "BasinObs_upperlower_testparameters.dat")
-inputs_path = os.path.join(two_dirs_up, "tweed_persist", "BasinObs_upperlower_datainputs.dat")
+params_path = os.path.join(two_dirs_up, "tweed_simplyQ", "BasinObs_upperlower_testparameters.dat")
+inputs_path = os.path.join(two_dirs_up, "tweed_simplyQ", "BasinObs_upperlower_datainputs.dat")
 # Use the dynamically constructed paths
 dataset = mobius.DataSet.setup_from_parameter_and_input_files(params_path, inputs_path)
 ```
@@ -76,8 +76,8 @@ dataset = mobius.DataSet.setup_from_parameter_and_input_files(params_path, input
 ```{python}
 #| echo: false
 comparisons = [
-    ('Reach flow', ['UpperTweed'], 'observed Q', ['UpperTweed']),
-    ('Reach flow', ['LowerTweed'], 'observed Q', ['LowerTweed'])
+    ('Reach flow (daily mean, cumecs)', ['UpperTweed'], 'observed Q', ['UpperTweed']),
+    ('Reach flow (daily mean, cumecs)', ['LowerTweed'], 'observed Q', ['LowerTweed'])
 ]
 ```
 

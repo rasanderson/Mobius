@@ -1,5 +1,6 @@
 start_date :  1994-01-01 
-timesteps :  2557 
+end_date :  2000-12-31 
+
 
 additional_timeseries : 
 "observed Q"
@@ -2571,7 +2572,7 @@ inputs :
 -1.04538973903266
 
 
-"Actual precipitation" {"LowerTweed"} :
+"Precipitation" {"LowerTweed"} :
 8.91210777795585
 0.641780351331349
 9.77401091227382
@@ -10250,7 +10251,7 @@ inputs :
 -1.320421
 
 
-"Actual precipitation" {"UpperTweed"} :
+"Precipitation" {"UpperTweed"} :
 7.798736
 0.8679973
 9.605256

@@ -8,23 +8,33 @@ import pickle
 from scipy.stats import norm
 import os
 
-# Initialise wrapper
-wrapper_fpath = (r'/home/nras/Mobius/PythonWrapper/mobius.py')
-#wr = imp.load_source('mobius', wrapper_fpath)
-#wr.initialize('../../Applications/SimplyP/simplyp.so')
-#wr.initialize('../../Applications/SimplyP/simplyp.dll')
-# Load the module from the specified file path
-spec = importlib.util.spec_from_file_location('mobius', wrapper_fpath)
-mobius_module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(mobius_module)
+## Initialise wrapper
+#wrapper_fpath = (r'/home/nras/Mobius/PythonWrapper/mobius.py')
+##wr = imp.load_source('mobius', wrapper_fpath)
+##wr.initialize('../../Applications/SimplyP/simplyp.so')
+##wr.initialize('../../Applications/SimplyP/simplyp.dll')
+## Load the module from the specified file path
+#spec = importlib.util.spec_from_file_location('mobius', wrapper_fpath)
+#mobius_module = importlib.util.module_from_spec(spec)
+#spec.loader.exec_module(mobius_module)
+#
+## Initialize the module
+#current_dir = os.getcwd()
+#wrapper_fpath = os.path.join(current_dir, 'PythonWrapper', 'mobius.py')
+#spec = importlib.util.spec_from_file_location('mobius', wrapper_fpath)
+#wr = importlib.util.module_from_spec(spec)
+#spec.loader.exec_module(wr)
+#mobius_module.initialize('/home/nras/Mobius/Applications/SimplyP/simplyp.so')
 
-# Initialize the module
+# This follows syntax of persist_calib_uncert.py which worked
+# Initialise wrapper
 current_dir = os.getcwd()
 wrapper_fpath = os.path.join(current_dir, 'PythonWrapper', 'mobius.py')
 spec = importlib.util.spec_from_file_location('mobius', wrapper_fpath)
 wr = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(wr)
-mobius_module.initialize('/home/nras/Mobius/Applications/SimplyP/simplyp.so')
+wr.initialize('/home/nras/Mobius/Applications/SimplyP/simplyp.so')
+
 
 # Calibration functions
 calib_fpath = (r'/home/nras/Mobius/PythonWrapper/mobius_calib_uncert_lmfit.py')
