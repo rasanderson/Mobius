@@ -119,7 +119,7 @@ This should be informed by system knowledge.
 ```{python}
 #| echo: false
 wanted_names = [
-    'Msnow', 'Tsnow', 'DDFmelt', 'DDET', 'Tc_s', 'Tc_g', 'perc_A_s_s', 'perc_A_s_g',
+    'DDFmelt', 'DDET', 'Ts', 'fc', 'ETP', 'fquick', 'bfi',
 ]
 # The following code selects any parameter with short_name *beginning* with any
 # of the strings in the 'wanted_names' list. This means e.g. that if you replace
