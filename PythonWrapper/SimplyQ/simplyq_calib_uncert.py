@@ -17,7 +17,7 @@ wrapper_fpath = (r'/home/nras/Mobius/PythonWrapper/mobius.py')
 spec = importlib.util.spec_from_file_location('mobius', wrapper_fpath)
 wr = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(wr)
-wr.initialize('/home/nras/Mobius/Applications/SimplyP/simplyp.so')
+wr.initialize('/home/nras/Mobius/Applications/SimplyQ/simplyQ.so')
 
 
 # Calibration functions

@@ -302,7 +302,7 @@ and the four occurrences of XXXX should be replaced with either Tarland or Morsa
 optimized_params = "/home/nras/Mobius/PythonWrapper/SimplyQ/optimized_params.dat"
 os.environ['OPTIMIZED'] = optimized_params
 os.environ['INPUTS_PATH'] = inputs_path
-!cd /home/nras/Mobius && python /home/nras/Mobius/PythonWrapper/SimplyQ/simplyp_calib_uncert.py
+!cd /home/nras/Mobius && python /home/nras/Mobius/PythonWrapper/SimplyQ/simplyq_calib_uncert.py
 
 #with open('/home/nras/Mobius/PythonWrapper/SimplyQ/simplyp_calib_uncert.py') as f:
 #    exec(f.read())
