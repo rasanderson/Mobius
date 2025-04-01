@@ -192,8 +192,8 @@ Note: Names for error terms must begin with err_. Conversely, short names for mo
 
 ```{python}
 # Add error params
-res.params.add(lmfit.Parameter('err_q_r1', value=0.5, min=0.05, max=3, user_data={}))
-res.params.add(lmfit.Parameter('err_q_r2', value=0.5, min=0.05, max=3, user_data={}))
+res.params.add(lmfit.Parameter('err_q', value=0.5, min=0.05, max=3, user_data={}))
+#res.params.add(lmfit.Parameter('err_q_r2', value=0.5, min=0.05, max=3, user_data={}))
 #res.params.add(lmfit.Parameter('err_ss', value=0.5, min=0.05, max=5, user_data={}))
 #res.params.add(lmfit.Parameter('err_p', value=0.5, min=0.05, max=2, user_data={}))
 
@@ -214,8 +214,7 @@ Note: The user_data={} is required. This dictionary will be updated after the MC
 #                   }
 
 # Link error params to model datasets for Tweed
-error_param_dict = {'observed Q':  'err_q_r1',
-                    'observed Q':  'err_q_r2',
+error_param_dict = {'observed Q':  'err_q',
                    }
 ```
 
@@ -239,9 +238,9 @@ In order to run the MCMC in parallel, all the settings from above are added to a
 # emcee setup
 nworkers = 32   # Number of cores/processes for parallelisation
 ntemps = 1      # Number of temperatures for parallel tempering (use 1 for default ensemble sampler)
-nsteps = 1000   # Number of steps per chain
-nwalk = 100     # Number of chains/walkers
-nburn = 500     # Number of steps to discard as burn-in
+nsteps = 100   # Number of steps per chain              # Reset to 1000
+nwalk = 10     # Number of chains/walkers               # Reset to 100
+nburn = 50     # Number of steps to discard as burn-in  # Reset to 500
 thin = 1        # Keep only every 'thin' steps to reduce chain auto-correlation
 
 # Chain initialisation
@@ -342,7 +341,7 @@ settings_dict = {'params':res.params,
 # Ensure the directory exists
 os.makedirs('results', exist_ok=True)
 
-with open('pickled/mcmc_settings.pkl', 'wb') as handle:
+with open('results/mcmc_settings.pkl', 'wb') as handle:
     pickle.dump(settings_dict, handle)
 ```
 
@@ -361,7 +360,7 @@ with open('pickled/mcmc_settings.pkl', 'wb') as handle:
 
 ```{python}
 #| echo: false
-with open('/home/nras/Mobius/PythonWrapper/SimplyQ/pickled/mcmc_results.pkl', 'rb') as handle:
+with open('/home/nras/Mobius/PythonWrapper/SimplyQ/results/mcmc_results.pkl', 'rb') as handle:
     result = pickle.load(handle)
     
 mobius_calib_uncert_lmfit.set_parameter_values(result.params, dataset)
