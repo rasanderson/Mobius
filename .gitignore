@@ -27,3 +27,8 @@ PythonWrapper/PERSiST/tweed_calibration_lower_files/
 PythonWrapper/PERSiST/tweed_calibration_upperlower_files
 PythonWrapper/PERSiST/tweed_calibration_upperlower.html
 met_office/raw_nc/
+tweed_unified/tweed_files
+*.quarto_ipynb
+*.html
+DEBUG
+tweed_unified/tweed_SimplyQ_files

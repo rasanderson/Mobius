@@ -1,4 +1,16 @@
-# SimplyQ hydrological model
+---
+title: "SimplyQ hydrological model"
+format: html
+editor: source
+---
+
+```{r, echo = FALSE}
+library(reticulate)
+use_condaenv("mobius", required = TRUE)
+```
+
+
+# Introduction
 
 Adaptation of calibration, originally for PERSiST model, but updated for SimplyQ, as the latter 'Simply' series of models more likely to be useful for the Tweed. Splits the Tweed into an 'upper' and 'lower' catchment. This version merges uses a linked model of Upper Tweed flowing into Lower.
 
