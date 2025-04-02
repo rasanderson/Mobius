@@ -16,7 +16,7 @@ Adaptation of calibration, originally for PERSiST model, but updated for SimplyQ
 
 I have stripped out some of the debug comments from original PERSiST version needed for translation from ipynb to Quarto, and changes in Python versions.
 
-```{python}
+```{python import_libs}
 #| echo: false
 import sys
 import subprocess
@@ -168,6 +168,8 @@ print('\n\nOptimized parameter values:\n')
 res.params.pretty_print(precision=3)
 
 cu.set_parameter_values(res.params, dataset)
+if not os.path.exists('results'):
+    os.makedirs('results')
 dataset.write_parameters_to_file('results/optimized_params.dat')
 ```
 
