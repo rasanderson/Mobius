@@ -58,8 +58,8 @@ This should happen next
 #| echo: false
 #current_dir = os.getcwd()
 #two_dirs_up = os.path.abspath(os.path.join(current_dir, "tweed_unified"))
-params_path = os.path.join("data", "BasinObs_upperlower_testparameters.dat")
-inputs_path = os.path.join("data", "BasinObs_upperlower_datainputs.dat")
+params_path = os.path.join("data", "simplyQN_parameters.dat")
+inputs_path = os.path.join("data", "simplyQN_datainputs.dat")
 # Use the dynamically constructed paths
 dataset = wr.DataSet.setup_from_parameter_and_input_files(params_path, inputs_path)
 

@@ -4,11 +4,15 @@ end_date :  2000-12-31
 
 additional_timeseries : 
 "observed Q"
+"observed NO3"
+"observed NH4"
 
 index_set_dependencies:
 "Air temperature" : {"Reaches"}
 "Precipitation" : {"Reaches"}
 "observed Q" : {"Reaches"}
+"observed NO3": {"Reaches"}
+"observed NH4": {"Reaches"}
 
 inputs : 
 
