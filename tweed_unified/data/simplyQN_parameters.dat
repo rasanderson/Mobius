@@ -46,7 +46,7 @@ parameters:
 	0.0276368121315009
 
 	"Soil field capacity" :     #(mm) [0, 1000] 
-	290 290 290
+	100 200 300
 
 	"Baseflow index" :     #(dimensionless) [0, 1] 
 	0.72561797005751
@@ -90,8 +90,8 @@ parameters:
 	# Land cover ("Reaches" "Landscape units") #
 
 	"Land use proportions" :     #(dimensionless) [0, 1] Must sum to 1 over the landscape units for each given reach.
-	0.2 0.3 0.5
-	0.2 0.3 0.5
+	0.1 0.2 0.7
+	0.4 0.3 0.4
 
 } # end of module "SimplyQ"
 
@@ -157,25 +157,25 @@ parameters:
 	# Nitrogen by land use ("Landscape units") #
 
 	"Initial soil water DIN concentration" :     #(mg/l) [0, 10]
-	0.5 3.5 0.4
+	3.5 2.0 0.5
 
 	"Net annual DIN input to soil" :     #(kg/Ha/year) [0, 1000] Inputs from deposition and fertilizer
-	6.6 130 2.5
+	130 30 2.5
 
 	"Fertilization start day" :     #(day) [1, 365]
-	60 60 60
+	60 70 80
 
 	"Fertilization end day" :     #(day) [1, 365]
-	120 120 120
+	120 100 90
 
 	"Daily NO3 fertilizer inputs" :     #(kg/Ha/day) [0, 100] 
-	0 0 0
+	10 5 0
 
 
 	# Nitrogen by reach ("Reaches") #
 
 	"Effluent DIN inputs" :     #(kg/day) [0, 100] 
-	2.75
+	1.50
 	2.75
 
 
