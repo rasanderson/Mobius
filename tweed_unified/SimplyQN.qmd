@@ -73,7 +73,9 @@ Also does comparisons which is where need to check.
 #| echo: false
 comparisons = [
     ('Reach flow (daily mean, cumecs)', ['UpperTweed'], 'observed Q', ['UpperTweed']),
-    ('Reach flow (daily mean, cumecs)', ['LowerTweed'], 'observed Q', ['LowerTweed'])
+    ('Reach flow (daily mean, cumecs)', ['LowerTweed'], 'observed Q', ['LowerTweed']),
+    ('Reach DIN concentration (volume weighted daily mean)', ['UpperTweed'], 'observed NO3', ['UpperTweed']),
+        ('Reach DIN concentration (volume weighted daily mean)', ['LowerTweed'], 'observed NO3', ['LowerTweed']),
 ]
 ```
 
