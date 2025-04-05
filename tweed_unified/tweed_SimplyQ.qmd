@@ -4,7 +4,7 @@ format: html
 editor: source
 ---
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, warning = FALSE}
 library(reticulate)
 use_condaenv("mobius", required = TRUE)
 ```
@@ -35,6 +35,7 @@ from importlib.machinery import SourceFileLoader
 import networkx
 import numdifftools
 import runpy
+import time
 
 # Styling
 warnings.filterwarnings("ignore")
@@ -161,11 +162,15 @@ Note: Performance can vary dramatically between optimisers, so it's often a good
 #| scrolled: true
 # Minimise using Levenberg–Marquardt (gives similar output to Nelder-Mead, 
 # but in this case it's faster)
+start_time = time.time()
 mi, res = cu.minimize_residuals(params, dataset, comparisons, method='nelder', norm=False, skip_timesteps=365)
 print('Optimization results\n')
 lmfit.report_fit(res)
 print('\n\nOptimized parameter values:\n')
 res.params.pretty_print(precision=3)
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Execution time: {execution_time} seconds")
 
 cu.set_parameter_values(res.params, dataset)
 if not os.path.exists('results'):
