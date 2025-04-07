@@ -121,10 +121,10 @@ parameters:
 	# Nitrogen global (no index sets) #
 
 	"Soil water DIN uptake+immobilisation rate at 20°C" :     #(m/day) [0, 10] 
-	0.0128783182974457
+	0.01
 
 	"(Q10) Soil water DIN uptake+immobilisation response to 10°C change in temperature" :     #(dimensionless) [1, 5] 
-	2.74075948014963
+	1.7
 
 	"Use growth curve" :
 	false
@@ -136,7 +136,7 @@ parameters:
 	200
 
 	"Groundwater DIN concentration" :     #(mg/l) [0, 30] 
-	0.509437159814097
+	0.5
 
 	"Constant groundwater DIN concentration" :     # Keep the concentration of DIN in the groundwater constant instead of simulating it.
 	true
@@ -145,10 +145,10 @@ parameters:
 	1000
 
 	"Reach denitrification rate at 20°C" :     #(m3/day) [0, 1000000] 
-	0.995317786700823
+	0.006
 
 	"(Q10) Reach denitrification rate response to 10°C change in temperature" :     #(dimensionless) [1, 5] 
-	1.00025853022692
+	1.4
 
 	"Quick flow is overland" :     # Whether quick flow water is clear or brings DIN from the soil
 	false
@@ -160,13 +160,13 @@ parameters:
 	3.5 2.0 0.5
 
 	"Net annual DIN input to soil" :     #(kg/Ha/year) [0, 1000] Inputs from deposition and fertilizer
-	130 30 2.5
+	160 20 0.5
 
 	"Fertilization start day" :     #(day) [1, 365]
-	60 70 80
+	60 60 60
 
 	"Fertilization end day" :     #(day) [1, 365]
-	120 100 90
+	120 120 120
 
 	"Daily NO3 fertilizer inputs" :     #(kg/Ha/day) [0, 100] 
 	10 5 0
@@ -176,7 +176,7 @@ parameters:
 
 	"Effluent DIN inputs" :     #(kg/day) [0, 100] 
 	1.50
-	2.75
+	0
 
 
 } # end of module "SimplyN"
