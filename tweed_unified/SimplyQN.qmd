@@ -76,7 +76,9 @@ comparisons = [
     ('Reach flow (daily mean, cumecs)', ['UpperTweed'], 'observed Q', ['UpperTweed']),
     ('Reach flow (daily mean, cumecs)', ['LowerTweed'], 'observed Q', ['LowerTweed']),
     ('Reach DIN concentration (volume weighted daily mean)', ['UpperTweed'], 'observed NO3', ['UpperTweed']),
-        ('Reach DIN concentration (volume weighted daily mean)', ['LowerTweed'], 'observed NO3', ['LowerTweed']),
+    ('Reach DIN concentration (volume weighted daily mean)', ['LowerTweed'], 'observed NO3', ['LowerTweed']),
+    ('Reach NH4 concentration (volume weighted daily mean)', ['UpperTweed'], 'observed NH4', ['UpperTweed']),
+    ('Reach NH4 concentration (volume weighted daily mean)', ['LowerTweed'], 'observed NH4', ['LowerTweed']),
 ]
 ```
 
