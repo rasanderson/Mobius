@@ -42,8 +42,7 @@ warnings.filterwarnings("ignore")
 plt.style.use('ggplot')
 ```
 # 1 Introduction
-This is based on the simplyP example Jupyter notebook which seems the best
-documented of the set.
+This is based on the simplyCNP example Jupyter notebook.
 
 ```{python}
 #| echo: false
@@ -51,7 +50,7 @@ documented of the set.
 wr = SourceFileLoader("mobius", r"python/mobius.py").load_module()
 cu = SourceFileLoader("mobius_calib_uncert_lmfit", r"python/mobius_calib_uncert_lmfit.py").load_module()
 
-wr.initialize('lib/simplyn.so')   # .so on Linux
+wr.initialize('lib/simplyCNP.so')   # .so on Linux
 ```
 
 # 2. Load observed datasets and model structure
@@ -61,8 +60,8 @@ This should happen next
 #| echo: false
 #current_dir = os.getcwd()
 #two_dirs_up = os.path.abspath(os.path.join(current_dir, "tweed_unified"))
-params_path = os.path.join("data", "simplyQN_parameters.dat")
-inputs_path = os.path.join("data", "simplyQN_datainputs.dat")
+params_path = os.path.join("data", "simplyQCNP_parameters.dat")
+inputs_path = os.path.join("data", "simplyQCNP_datainputs.dat")
 # Use the dynamically constructed paths
 dataset = wr.DataSet.setup_from_parameter_and_input_files(params_path, inputs_path)
 
@@ -79,6 +78,15 @@ comparisons = [
     ('Reach flow (daily mean, cumecs)', ['LowerTweed'], 'observed Q', ['LowerTweed']),
     ('Reach DIN concentration (volume weighted daily mean)', ['UpperTweed'], 'observed NO3', ['UpperTweed']),
     ('Reach DIN concentration (volume weighted daily mean)', ['LowerTweed'], 'observed NO3', ['LowerTweed']),
+    ('Reach suspended sediment concentration', ['UpperTweed'], 'observed SS', ['UpperTweed']),
+    ('Reach suspended sediment concentration', ['LowerTweed'], 'observed SS', ['LowerTweed']),
+    ('Reach TDP concentration', ['UpperTweed'], 'observed TDP', ['UpperTweed']),
+    ('Reach TDP concentration', ['LowerTweed'], 'observed TDP', ['LowerTweed']),
+    ('Reach PP concentration', ['UpperTweed'], 'observed PP', ['UpperTweed']),
+    ('Reach PP concentration', ['LowerTweed'], 'observed PP', ['LowerTweed']),
+    ('Reach DOC concentration (volume weighted daily mean)', ['UpperTweed'], 'observed DOC', ['UpperTweed']),
+    ('Reach DOC concentration (volume weighted daily mean)', ['LowerTweed'], 'observed DOC', ['LowerTweed']),
+
 ]
 ```
 
@@ -122,10 +130,18 @@ This should be informed by system knowledge.
 
 ```{python}
 #| echo: false
+#wanted_names = [
+#    'DDFmelt', 'DDET', 'Ts', 'fc', 'ETP', 'fquick', 'bfi',
+#    'Q10den', 'den', 'DINgw', 'DINin', 'DINeff', 'sensors',
+#]
+# This is the list from the example
 wanted_names = [
-    'DDFmelt', 'DDET', 'Ts', 'fc', 'ETP', 'fquick', 'bfi',
-    'Q10den', 'den', 'DINgw', 'DINin', 'DINeff', 'sensors',
+    'DDET', 'DDFmelt', 'fquick', 'fc', 'bfi', 'Tg', 'Ts', 'STC',
+    'fc', 'den', 'Q10den', 'imms', 'Q10imms', 'DINgw',
+    'ksed', 'TDPsw_A', 'TDPgw', 'EPP', 'TDPeff',
+    'kT', 'baseDOC', 'DOCgw',
 ]
+
 # The following code selects any parameter with short_name *beginning* with any
 # of the strings in the 'wanted_names' list. This means e.g. that if you replace
 # 'Ts_SN' with 'Ts' in the above list, it will select all the parameters
@@ -143,36 +159,36 @@ params = cu.parameter_df_to_lmfit(calib_df)
 
 
 # Set param_df based on separate calibration of just simplyQ
-params['DDET_A'].value = 0.0532
-params['DDET_IG'].value = 0.199
-params['DDET_SN'].value = 0.141
-params['DDFmelt'].value = 1.52
-params['ETPtmin_A'].value = -2.16
-params['ETPtmin_IG'].value = -4.45
-params['ETPtmin_SN'].value = -4.59
-params['Ts_A'].value = 3.28
-params['Ts_IG'].value = 1.27
-params['Ts_SN'].value = 40
-params['bfi'].value = 0.0139
-params['fc_A'].value = 635
-params['fc_IG'].value = 185
-params['fc_SN'].value = 258
-params['fquick'].value = 2.28e-06
-params['DDET_A'].vary = False
-params['DDET_IG'].vary = False
-params['DDET_SN'].vary = False
-params['DDFmelt'].vary = False
-params['ETPtmin_A'].vary = False
-params['ETPtmin_IG'].vary = False
-params['ETPtmin_SN'].vary = False
-params['Ts_A'].vary = False
-params['Ts_IG'].vary = False
-params['Ts_SN'].vary = False
-params['bfi'].vary = False
-params['fc_A'].vary = False
-params['fc_IG'].vary = False
-params['fc_SN'].vary = False
-params['fquick'].vary = False
+#params['DDET_A'].value = 0.0532
+#params['DDET_IG'].value = 0.199
+#params['DDET_SN'].value = 0.141
+#params['DDFmelt'].value = 1.52
+#params['ETPtmin_A'].value = -2.16
+#params['ETPtmin_IG'].value = -4.45
+#params['ETPtmin_SN'].value = -4.59
+#params['Ts_A'].value = 3.28
+#params['Ts_IG'].value = 1.27
+#params['Ts_SN'].value = 40
+#params['bfi'].value = 0.0139
+#params['fc_A'].value = 635
+#params['fc_IG'].value = 185
+#params['fc_SN'].value = 258
+#params['fquick'].value = 2.28e-06
+#params['DDET_A'].vary = False
+#params['DDET_IG'].vary = False
+#params['DDET_SN'].vary = False
+#params['DDFmelt'].vary = False
+#params['ETPtmin_A'].vary = False
+#params['ETPtmin_IG'].vary = False
+#params['ETPtmin_SN'].vary = False
+#params['Ts_A'].vary = False
+#params['Ts_IG'].vary = False
+#params['Ts_SN'].vary = False
+#params['bfi'].vary = False
+#params['fc_A'].vary = False
+#params['fc_IG'].vary = False
+#params['fc_SN'].vary = False
+#params['fquick'].vary = False
 
 ```
 
@@ -183,6 +199,16 @@ It is possible to modify prior ranges for each paramter. Initial values can also
 #params['DDFmelt'].max = 5.0
 
 params.pretty_print(precision = 3)
+```
+
+The example script also suggests locking some parameters across landscape units to reduce complexity.
+```{python}
+#Reduce complexity by locking some parameters across landscape units
+params['DDET_A'].set(expr='DDET_SN')
+params['DDET_IG'].set(expr='DDET_SN')
+params['Ts_A'].set(expr='Ts_IG')
+params['STC_A'].set(expr='STC_SN')
+params['STC_IG'].set(expr='STC_SN')
 ```
 
 ## 5.2 Least-squares optimisation
