@@ -23,7 +23,7 @@ lois.raw$Suspended.sediment <- lois.raw$Carbon.organic.particulate + lois.raw$Ni
 lois.raw <- lois.raw %>%
   mutate(DATE = dmy_hm(DATE), # Convert to datetime
          DATE = if_else(hour(DATE) >= 12, DATE + days(1), DATE), # Round up if after 12:00
-         DATE = format(DATE, "%Y-%m-%d")) # Format as desired
+         DATE = as.Date(DATE)) # Format defaults to YYYY-mm-dd
 
 
 # Upper or Lower Tweed for site name

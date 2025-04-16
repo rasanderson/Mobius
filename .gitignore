@@ -32,4 +32,5 @@ tweed_unified/tweed_files
 *.html
 DEBUG
 tweed_unified/tweed_SimplyQ_files
+tweed_unified/SimplyQCNP_files/
 *.rmarkdown
