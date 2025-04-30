@@ -4,7 +4,7 @@ format: html
 editor: source
 ---
 
-```{r, echo = FALSE, warning = FALSE}
+```{r, echo = FALSE, warning = FALSE, setup_conda}
 library(reticulate)
 use_condaenv("mobius", required = TRUE)
 ```
@@ -42,16 +42,15 @@ warnings.filterwarnings("ignore")
 plt.style.use('ggplot')
 ```
 # 1 Introduction
-This is based on the simplyP example Jupyter notebook which seems the best
-documented of the set.
+This is based on the simplyCNP example Jupyter notebook.
 
-```{python}
+```{python load_mobius_modules}
 #| echo: false
 # Initialise wrapper
 wr = SourceFileLoader("mobius", r"python/mobius.py").load_module()
 cu = SourceFileLoader("mobius_calib_uncert_lmfit", r"python/mobius_calib_uncert_lmfit.py").load_module()
 
-wr.initialize('lib/simplyn.so')   # .so on Linux
+wr.initialize('lib/simplyCNP.so')   # .so on Linux
 ```
 
 # 2. Load observed datasets and model structure
@@ -61,8 +60,8 @@ This should happen next
 #| echo: false
 #current_dir = os.getcwd()
 #two_dirs_up = os.path.abspath(os.path.join(current_dir, "tweed_unified"))
-params_path = os.path.join("data", "simplyQN_parameters.dat")
-inputs_path = os.path.join("data", "simplyQN_datainputs.dat")
+params_path = os.path.join("data", "simplyQCNP_parameters.dat")
+inputs_path = os.path.join("data", "simplyQCNP_datainputs.dat")
 # Use the dynamically constructed paths
 dataset = wr.DataSet.setup_from_parameter_and_input_files(params_path, inputs_path)
 
@@ -72,13 +71,22 @@ dataset = wr.DataSet.setup_from_parameter_and_input_files(params_path, inputs_pa
 # 3. Link simulated and observed datasets
 Also does comparisons which is where need to check.
 
-```{python}
+```{python set_comparisons}
 #| echo: false
 comparisons = [
     ('Reach flow (daily mean, cumecs)', ['UpperTweed'], 'observed Q', ['UpperTweed']),
     ('Reach flow (daily mean, cumecs)', ['LowerTweed'], 'observed Q', ['LowerTweed']),
     ('Reach DIN concentration (volume weighted daily mean)', ['UpperTweed'], 'observed NO3', ['UpperTweed']),
     ('Reach DIN concentration (volume weighted daily mean)', ['LowerTweed'], 'observed NO3', ['LowerTweed']),
+    ('Reach suspended sediment concentration', ['UpperTweed'], 'observed SS', ['UpperTweed']),
+    ('Reach suspended sediment concentration', ['LowerTweed'], 'observed SS', ['LowerTweed']),
+    ('Reach TDP concentration', ['UpperTweed'], 'observed TDP', ['UpperTweed']),
+    ('Reach TDP concentration', ['LowerTweed'], 'observed TDP', ['LowerTweed']),
+    ('Reach PP concentration', ['UpperTweed'], 'observed PP', ['UpperTweed']),
+    ('Reach PP concentration', ['LowerTweed'], 'observed PP', ['LowerTweed']),
+    ('Reach DOC concentration (volume weighted daily mean)', ['UpperTweed'], 'observed DOC', ['UpperTweed']),
+    ('Reach DOC concentration (volume weighted daily mean)', ['LowerTweed'], 'observed DOC', ['LowerTweed']),
+
 ]
 ```
 
@@ -87,7 +95,7 @@ comparisons = [
 This should print out a reasonable-looking table but has caused problems. Coded
 reaches as r1 and r2 to match a comment in one file by Leah Jackson-Blake.
 
-```{python}
+```{python define_parameters}
 #| echo: false
 #index_short_name = {'All':'A', 'Quick':'q', 'Soilwater':'s', 'Groundwater':'g', 'UpperTweed':'r', 'LowerTweed':'r'}
 index_short_name = {'Arable':'A', 'Improved grassland':'IG', 'Semi-natural':'SN', 'UpperTweed':'r1', 'LowerTweed':'r2'}
@@ -104,9 +112,13 @@ Note the index column in this dataframe, which specifies how each parameter vari
 For this particular dataset, the default values in the initial_value column were from LJ-B example informed by manual calibration. We can easily run the model with these values and assess the goodness-of-fit. The functions below produce one plot and one set of summary statistics for each dataset in comparisons.
 
 
-```{python}
+```{python plots_gof_basic}
 #| echo: false
 #| scrolled: true
+
+# Control start and end date as hydrology and water quality don't match
+dataset.set_parameter_time("Start date", "", "1994-08-22")
+dataset.set_parameter_time("End date", "", "1997-02-18")
 dataset.run_model()
 # Print goodness of fit
 cu.print_goodness_of_fit(dataset, comparisons)
@@ -120,12 +132,20 @@ plt.show()
 ## 5.1 Choose parameters to calibrate
 This should be informed by system knowledge.
 
-```{python}
+```{python define_calib_params}
 #| echo: false
+#wanted_names = [
+#    'DDFmelt', 'DDET', 'Ts', 'fc', 'ETP', 'fquick', 'bfi',
+#    'Q10den', 'den', 'DINgw', 'DINin', 'DINeff', 'sensors',
+#]
+# This is the list from the example
 wanted_names = [
-    'DDFmelt', 'DDET', 'Ts', 'fc', 'ETP', 'fquick', 'bfi',
-    'Q10den', 'den', 'DINgw', 'DINin', 'DINeff', 'sensors',
+    'DDET', 'DDFmelt', 'fquick', 'fc', 'bfi', 'Tg', 'Ts', 'STC',
+    'fc', 'den', 'Q10den', 'imms', 'Q10imms', 'DINgw',
+    'ksed', 'TDPsw_A', 'TDPgw', 'EPP', 'TDPeff',
+    'kT', 'baseDOC', 'DOCgw',
 ]
+
 # The following code selects any parameter with short_name *beginning* with any
 # of the strings in the 'wanted_names' list. This means e.g. that if you replace
 # 'Ts_SN' with 'Ts' in the above list, it will select all the parameters
@@ -136,53 +156,63 @@ calib_df
 
 Having defined a dataframe of parameters we wish to calibrate, complete with short names, initial values and minimum to maximum ranges, we can instantiate an LMFit Parameters object, which makes it easy to keep track of bounded parameter values. Here, suffixes _A, _IG and _SN refer to arable, improved grassland and semi-natural. r1 and r2 would be reach 1 (UpperTweed), and reach 2 (LowerTweed) etc., but need to be in list originally.
 
-```{python}
+```{python adjust_calib_params}
 #| echo: false
 # Convert to LMFit parameter object
 params = cu.parameter_df_to_lmfit(calib_df)
 
 
 # Set param_df based on separate calibration of just simplyQ
-params['DDET_A'].value = 0.0532
-params['DDET_IG'].value = 0.199
-params['DDET_SN'].value = 0.141
-params['DDFmelt'].value = 1.52
-params['ETPtmin_A'].value = -2.16
-params['ETPtmin_IG'].value = -4.45
-params['ETPtmin_SN'].value = -4.59
-params['Ts_A'].value = 3.28
-params['Ts_IG'].value = 1.27
-params['Ts_SN'].value = 40
-params['bfi'].value = 0.0139
-params['fc_A'].value = 635
-params['fc_IG'].value = 185
-params['fc_SN'].value = 258
-params['fquick'].value = 2.28e-06
-params['DDET_A'].vary = False
-params['DDET_IG'].vary = False
-params['DDET_SN'].vary = False
-params['DDFmelt'].vary = False
-params['ETPtmin_A'].vary = False
-params['ETPtmin_IG'].vary = False
-params['ETPtmin_SN'].vary = False
-params['Ts_A'].vary = False
-params['Ts_IG'].vary = False
-params['Ts_SN'].vary = False
-params['bfi'].vary = False
-params['fc_A'].vary = False
-params['fc_IG'].vary = False
-params['fc_SN'].vary = False
-params['fquick'].vary = False
+#params['DDET_A'].value = 0.0532
+#params['DDET_IG'].value = 0.199
+#params['DDET_SN'].value = 0.141
+#params['DDFmelt'].value = 1.52
+#params['ETPtmin_A'].value = -2.16
+#params['ETPtmin_IG'].value = -4.45
+#params['ETPtmin_SN'].value = -4.59
+#params['Ts_A'].value = 3.28
+#params['Ts_IG'].value = 1.27
+#params['Ts_SN'].value = 40
+#params['bfi'].value = 0.0139
+#params['fc_A'].value = 635
+#params['fc_IG'].value = 185
+#params['fc_SN'].value = 258
+#params['fquick'].value = 2.28e-06
+#params['DDET_A'].vary = False
+#params['DDET_IG'].vary = False
+#params['DDET_SN'].vary = False
+#params['DDFmelt'].vary = False
+#params['ETPtmin_A'].vary = False
+#params['ETPtmin_IG'].vary = False
+#params['ETPtmin_SN'].vary = False
+#params['Ts_A'].vary = False
+#params['Ts_IG'].vary = False
+#params['Ts_SN'].vary = False
+#params['bfi'].vary = False
+#params['fc_A'].vary = False
+#params['fc_IG'].vary = False
+#params['fc_SN'].vary = False
+#params['fquick'].vary = False
 
 ```
 
 It is possible to modify prior ranges for each paramter. Initial values can also be changed using e.g. params['DDFmelt'].value = 2.5, and calibration can be disabled entirely for specific parameters using e.g. params['DDFmelt'].vary = False. Note that parameters must be referred to by their short_name attribute. Note: params will return a dataframe showing the current user choices for the calibrating parameters. (In a Python script/terminal, params.pretty_print provides similar output).
 
-```{python}
+```{python print_calib_params}
 #params['DDFmelt'].min = 0.5
 #params['DDFmelt'].max = 5.0
 
 params.pretty_print(precision = 3)
+```
+
+The example script also suggests locking some parameters across landscape units to reduce complexity.
+```{python lock_selected_params}
+#Reduce complexity by locking some parameters across landscape units
+params['DDET_A'].set(expr='DDET_SN')
+params['DDET_IG'].set(expr='DDET_SN')
+params['Ts_A'].set(expr='Ts_IG')
+params['STC_A'].set(expr='STC_SN')
+params['STC_IG'].set(expr='STC_SN')
 ```
 
 ## 5.2 Least-squares optimisation
@@ -195,9 +225,10 @@ All of these optimisers aim to minimise the sum of squared residuals. From a "fo
 Note: Performance can vary dramatically between optimisers, so it's often a good idea to try a few different alternatives. This will also allow you to check whether the same "optimum" is identified by the various algorithms.
 
 
-```{python}
+```{python auto_calib_slow}
 #| echo: false
 #| scrolled: true
+#| eval: false
 # Minimise using Levenberg–Marquardt (gives similar output to Nelder-Mead, 
 # but in this case it's faster)
 start_time = time.time()
@@ -222,7 +253,8 @@ The optimiser has run the model roughly 500 times in around 50 seconds. Output i
 ## 5.3 Visualise results
 To see the model output for the optimised parameter values, first use set_parameter_values to update the default values, and then re-run the model, as above.
 
-```{python}
+```{python visualis_calib}
+#| eval: false
 cu.set_parameter_values(res.params, dataset)
 dataset.run_model()
 cu.print_goodness_of_fit(dataset, comparisons)

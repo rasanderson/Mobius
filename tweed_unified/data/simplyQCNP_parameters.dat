@@ -1,0 +1,230 @@
+# Parameter file generated for model SimplyQ, containing modules (Degree-day PET V0.1, SimplyQ V0.4.1) at 2021-10-07 11:54:06
+
+index_sets:
+"Landscape units" : {"Arable" "Improved grassland" "Semi-natural"}
+"Reaches" : {"UpperTweed" {"LowerTweed" "UpperTweed"}}
+
+parameters:
+
+# System (no index sets) #
+
+"Start date" :     # [1000-01-01, 3000-01-01] The start date is inclusive
+1994-01-01
+
+"End date" :     #(days) [0, 18446744073709551615]
+2000-12-31
+
+
+{ module "Degree-day PET" version "0.2"
+
+	# Potential evapotranspiration ("Landscape units") #
+
+	"Degree-day evapotranspiration" :     #(mm/°C/day) [0.05, 0.2] 
+	0.157259860661406 0.157259860661406 0.157259860661406
+
+	"Minimal temperature for evapotranspiration" :     #(°C) [-5, 5] 
+	-1.31696713783918 -1.31696713783918 -1.31696713783918
+
+
+} # end of module "Degree-day PET"
+
+
+{ module "SimplyQ" version "0.4.1"
+
+	# Snow (no index sets) #
+
+	"Initial snow depth as water equivalent" :     #(mm) [0, 50000]
+	0
+
+	"Degree-day factor for snowmelt" :     #(mm/°C/day) [0, 5] 
+	1.5325818297552
+
+
+	# Hydrology (no index sets) #
+
+	"Proportion of precipitation that contributes to quick flow" :     #(dimensionless) [0, 1] 
+	0.0276368121315009
+
+	"Soil field capacity" :     #(mm) [0, 1000] 
+	100 200 300
+
+	"Baseflow index" :     #(dimensionless) [0, 1] 
+	0.72561797005751
+
+	"Groundwater time constant" :     #(days) [0.5, 400] 
+	42.0212181491907
+
+	#"Minimum groundwater flow" :     #(mm/day) [0, 10] 
+	#0
+
+	"Manning's coefficient" :     #(s/(m^1/3)) [0.012, 0.1] Default of 0.04 is for clean winding natural channels. See e.g. Chow 1959 for a table of values for other channel types
+	0.04
+
+
+	# General subcatchment and reach parameters ("Reaches") #
+
+	"Catchment area" :     #(km^2) [0, 10000]
+	1502
+	4434
+
+	"Reach length" :     #(m) [0, 10000000] This is divided by two for headwater reaches in the model to calculate the average reach length travelled by water. If this is inappropriate for your headwater reach, adjust this parameter accordingly
+  77250
+  67000
+
+	"Reach slope" :     #(m/m) [1e-05, 3]
+	0.04
+	0.04
+
+
+	# Hydrology subcatchment/reach ("Reaches") #
+
+	"Initial in-stream flow" :     #(m^3/s) [0, 1000000] This parameter is only used by reaches that don't have other reaches as inputs.
+	1
+	1
+
+	# Hydrology land ("Landscape units") #
+
+	"Soil water time constant" :     #(days) [0.01, 40] 
+	1.79252221693565 1.79252221693565 6.50883859529964
+
+	# Land cover ("Reaches" "Landscape units") #
+
+	"Land use proportions" :     #(dimensionless) [0, 1] Must sum to 1 over the landscape units for each given reach.
+	0.1 0.2 0.7
+	0.4 0.3 0.4
+
+} # end of module "SimplyQ"
+
+
+{ module "Simply soil temperature" version "0.1"
+
+	# Global soil temperature parameters (no index sets) #
+
+	"Snow depth / soil temperature factor" :     #(/cm) [-3, -0.001] Defines empirical relationship between snow depth and its insulating effect on soils, incorporating the conversion from snow depth in water equivalent to snow depth
+	-0.2
+
+	"Initial soil temperature" :     #(°C) [-30, 40]
+	10
+
+
+	# Soil temperature parameters (varying by soil or land class) ("Landscape units") #
+
+	"Soil thermal conductivity over specific heat capacity" :     #(1E-6 m2/s) [0.01, 0.8] Soil thermal conductivity (W/m/°C, range 0.4-0.8) divided by soil specific heat capacity (MJ/m3/°C, range 1.0-1.3; more like 4-15 if there is freeze-thaw)
+	0.7 0.7 0.7
+
+
+} # end of module "Simply soil temperature"
+
+
+{ module "SimplyN" version "_dev_02"
+
+	# Nitrogen global (no index sets) #
+
+	"Soil water DIN uptake+immobilisation rate at 20°C" :     #(m/day) [0, 10] 
+	0.01
+
+	"(Q10) Soil water DIN uptake+immobilisation response to 10°C change in temperature" :     #(dimensionless) [1, 5] 
+	1.7
+
+	"Use growth curve" :
+	false
+
+	"Day of highest uptake+immobilisation" :     #(day) [1, 365]
+	200
+
+	"Length of interval where 95% of growth takes place" :     #(day) [0, 365]
+	200
+
+	"Groundwater DIN concentration" :     #(mg/l) [0, 30] 
+	0.5
+
+	"Constant groundwater DIN concentration" :     # Keep the concentration of DIN in the groundwater constant instead of simulating it.
+	true
+
+	"Groundwater retention volume" :     #(mm) [0, 2000] Additional dissolution buffer for DIN that does not affect the hydrology. Only used with non-constant gw concentration.
+	1000
+
+	"Reach denitrification rate at 20°C" :     #(m3/day) [0, 1000000] 
+	0.006
+
+	"(Q10) Reach denitrification rate response to 10°C change in temperature" :     #(dimensionless) [1, 5] 
+	1.4
+
+	"Quick flow is overland" :     # Whether quick flow water is clear or brings DIN from the soil
+	false
+
+
+	# Nitrogen by land use ("Landscape units") #
+
+	"Initial soil water DIN concentration" :     #(mg/l) [0, 10]
+	3.5 2.0 0.5
+
+	"Net annual DIN input to soil" :     #(kg/Ha/year) [0, 1000] Inputs from deposition and fertilizer
+	160 20 0.5
+
+	"Fertilization start day" :     #(day) [1, 365]
+	60 60 60
+
+	"Fertilization end day" :     #(day) [1, 365]
+	120 120 120
+
+	"Daily NO3 fertilizer inputs" :     #(kg/Ha/day) [0, 100] 
+	10 5 0
+
+
+	# Nitrogen by reach ("Reaches") #
+
+	"Effluent DIN inputs" :     #(kg/day) [0, 100] 
+	1.50
+	0
+
+
+} # end of module "SimplyN"
+
+
+###################### SimplyP V0.4 ######################
+
+# Phosphorous (no index sets) #
+
+"Dynamic soil water EPC0, TDP and soil labile P" :     # Calculate a dynamic soil water EPC0 (the equilibrium P concentration of zero sorption), and therefore soilwater TDP concentration, so that it varies with labile P content? The labile P will also therefore vary
+true
+
+"Run in calibration mode" :     # Run model in calibration mode? If true, the initial agricultural soil water TDP concentration (and therefore EPC0) is calibrated and used to estimate the phosphorus sorption coefficient. If false, the sorption coefficient is read in from the parameter file
+false
+
+"Soil mass per m2" :     #(kg/m^2) [0, 200]
+95
+
+"Phosphorous sorption coefficient" :     #(l/mg) [0, 0.1] Gradient of linear relationship between labile P and TDP concentration. This value is only used if calibration run mode is set to false, otherwise it is estimated by the model
+0.00931
+
+"Groundwater TDP concentration" :     #(mg/l) [0, 10] 
+0.015
+0.015
+
+"Particulate P enrichment factor" :     #(dimensionless) [1, 5] P content of eroded material compared to P content of bulk soils
+1.23
+
+"SRP fraction" :     #(dimensionless) [0, 1] Factor to multiply TDP by to estimate instream SRP concentration
+0.7
+
+"Inactive soil P content" :     #(mg/kg) [0, 10000] Is recommended to be about the same as the Initial total soil P content of seminatural land, but a little lower.
+873 873 873
+
+
+# Phosphorous reach ("Reaches") #
+
+"Reach effluent TDP inputs" :     #(kg/day) [0, 10] 
+0.48
+0.48
+
+# Phosphorous land ("Landscape units") #
+
+"Net annual P input to soil" :     #(kg/ha/year) [-100, 100]
+10 10 10
+
+"Initial soil water TDP concentration and EPC0" :     #(mg/l) [0, 10] If the dynamic soil P option is set to false, this value is the soil water TDP concentration throughout the model run.
+0.083 0.083 0
+
+"Initial total soil P content" :     #(mg/kg) [0, 10000]
+1458 1458 873
