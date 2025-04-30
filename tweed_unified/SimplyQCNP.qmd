@@ -140,6 +140,7 @@ This should be informed by system knowledge.
 #]
 # This is the list from the example
 wanted_names = [
+    'ETPtmin_A', 'ETPtmin_IG', 'ETPtmin_SN',
     'DDET', 'DDFmelt', 'fquick', 'fc', 'bfi', 'Tg', 'Ts', 'STC',
     'fc', 'den', 'Q10den', 'imms', 'Q10imms', 'DINgw',
     'ksed', 'TDPsw_A', 'TDPgw', 'EPP', 'TDPeff',
@@ -163,36 +164,36 @@ params = cu.parameter_df_to_lmfit(calib_df)
 
 
 # Set param_df based on separate calibration of just simplyQ
-#params['DDET_A'].value = 0.0532
-#params['DDET_IG'].value = 0.199
-#params['DDET_SN'].value = 0.141
-#params['DDFmelt'].value = 1.52
-#params['ETPtmin_A'].value = -2.16
-#params['ETPtmin_IG'].value = -4.45
-#params['ETPtmin_SN'].value = -4.59
-#params['Ts_A'].value = 3.28
-#params['Ts_IG'].value = 1.27
-#params['Ts_SN'].value = 40
-#params['bfi'].value = 0.0139
-#params['fc_A'].value = 635
-#params['fc_IG'].value = 185
-#params['fc_SN'].value = 258
-#params['fquick'].value = 2.28e-06
-#params['DDET_A'].vary = False
-#params['DDET_IG'].vary = False
-#params['DDET_SN'].vary = False
-#params['DDFmelt'].vary = False
-#params['ETPtmin_A'].vary = False
-#params['ETPtmin_IG'].vary = False
-#params['ETPtmin_SN'].vary = False
-#params['Ts_A'].vary = False
-#params['Ts_IG'].vary = False
-#params['Ts_SN'].vary = False
-#params['bfi'].vary = False
-#params['fc_A'].vary = False
-#params['fc_IG'].vary = False
-#params['fc_SN'].vary = False
-#params['fquick'].vary = False
+params['DDET_A'].value = 0.0532
+params['DDET_IG'].value = 0.199
+params['DDET_SN'].value = 0.141
+params['DDFmelt'].value = 1.52
+params['ETPtmin_A'].value = -2.16
+params['ETPtmin_IG'].value = -4.45
+params['ETPtmin_SN'].value = -4.59
+params['Ts_A'].value = 3.28
+params['Ts_IG'].value = 1.27
+params['Ts_SN'].value = 40
+params['bfi'].value = 0.0139
+params['fc_A'].value = 635
+params['fc_IG'].value = 185
+params['fc_SN'].value = 258
+params['fquick'].value = 2.28e-06
+params['DDET_A'].vary = False
+params['DDET_IG'].vary = False
+params['DDET_SN'].vary = False
+params['DDFmelt'].vary = False
+params['ETPtmin_A'].vary = False
+params['ETPtmin_IG'].vary = False
+params['ETPtmin_SN'].vary = False
+params['Ts_A'].vary = False
+params['Ts_IG'].vary = False
+params['Ts_SN'].vary = False
+params['bfi'].vary = False
+params['fc_A'].vary = False
+params['fc_IG'].vary = False
+params['fc_SN'].vary = False
+params['fquick'].vary = False
 
 ```
 
